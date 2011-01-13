@@ -4,7 +4,9 @@
 
 moos 2.1 has been modified by surrim. Original work by mensi and CABAListic.
 
-moos is GPL'ed software, the source code is available through SVN (details on www.insideearth.de)
+Changes for 2.1.0.3055
+- Rebuild with latest compiler and libs (GCC 4.5.0, wxWidgets 2.9.1, zlib 1.2.5)
+- Fixed bug with restoring window position
 
 Changes for 2.1.0.3053
 - Position will be restored
