@@ -345,7 +345,6 @@ std::string MainFrame::GenerateLoginMessage(wxString User, wxString Password) {
 	sLogin+=Password.mb_str();
 	sLogin+=GetInvertedLength(0);
 	sLogin+=GetInvertedLength(0);
-	sLogin+=GetInvertedLength(0);
 	sLogin=EncodeMessage(sLogin);
 	sLogin=GetInvertedLength(sLogin.length()+4)+sLogin;
 	return sLogin;

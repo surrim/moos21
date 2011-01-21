@@ -31,45 +31,43 @@ InputDialog::InputDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, w
 		Style(Style) {
 	SetFont(Font);
 	MainSizer=new wxBoxSizer(wxVERTICAL);
-	MainSizer->AddSpacer(4);
+	MainSizer->AddSpacer(6);
 	if (Text!=wxEmptyString) {
-		//MainSizer->AddSpacer(-12);
 		ltext=new wxStaticText(this, -1, Text);
-		MainSizer->Add(ltext, 0, wxEXPAND|wxALL, 16);
-		//MainSizer->AddSpacer(-16);
+		MainSizer->Add(ltext, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
+		MainSizer->AddSpacer(3);
 	}
 	if (Style>=2) {
-		MainSizer->AddSpacer(-12);
 		if (Style!=4)
-			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, -1), ChoiceList);
+			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, wxDefaultCoord), ChoiceList);
 		else
-			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, -1), ChoiceList, wxLB_EXTENDED);
+			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, wxDefaultCoord), ChoiceList, wxLB_EXTENDED);
 		if (choice->FindString(Default)!=wxNOT_FOUND) choice->SetSelection(choice->FindString(Default));
-		MainSizer->Add(choice, 1, wxEXPAND|wxALL, 16);
-		MainSizer->AddSpacer(-16);
+		MainSizer->Add(choice, 1, wxEXPAND|wxLEFT|wxRIGHT, 12);
+		MainSizer->AddSpacer(3);
 	}
 	if (Style<=2) {
-		MainSizer->AddSpacer(-12);
-		if (Style==2) MainSizer->AddSpacer(-5);
+		//MainSizer->AddSpacer(-12);
+		//if (Style==2) MainSizer->AddSpacer(-5);
 		if (Style!=1)
 			input=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(120, -1));
 		else
 			input=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(120, -1), wxTE_PASSWORD);
 		input->SetValue(Default);
-		MainSizer->Add(input, 0, wxEXPAND|wxALL, 16);
-		MainSizer->AddSpacer(-16);
+		MainSizer->Add(input, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
+		MainSizer->AddSpacer(3);
 	}
-	MainSizer->AddSpacer(-12);
+	//MainSizer->AddSpacer(-12);
 	okbutton=new wxButton(this, wxID_OK, LangIni->Read(wxT("translations/ok"), wxT("OK")));
 	cancelbutton=new wxButton(this, wxID_CANCEL, LangIni->Read(wxT("translations/cancel"), wxT("Cancel")));
 	ButtonSizer=new wxBoxSizer(wxHORIZONTAL);
 	//ButtonSizer->AddStretchSpacer();
 	ButtonSizer->Add(cancelbutton, 1, wxEXPAND|wxALL, 0);
-	ButtonSizer->AddSpacer(4);
+	ButtonSizer->AddSpacer(6);
 	ButtonSizer->Add(okbutton, 1, wxEXPAND|wxALL, 0);
 	okbutton->SetDefault();
-	MainSizer->Add(ButtonSizer, 0, wxEXPAND|wxALL, 16);
-	MainSizer->AddSpacer(-8);
+	MainSizer->Add(ButtonSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
+	MainSizer->AddSpacer(6);
 	if (Style<=1) {
 		input->SetFocus();
 	} else {
@@ -77,8 +75,8 @@ InputDialog::InputDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, w
 	}
 
 	SetSizer(MainSizer);
-	SetInitialSize();
 	SetAutoLayout(true);
+	SetInitialSize();
 }
 
 void InputDialog::OnText(wxCommandEvent& Event) {
