@@ -11,7 +11,7 @@
 #include <wx/wfstream.h>
 
 void MainFrame::OnAutoLoginAccount(wxCommandEvent& event) {
-	if (LoginName==wxT("")) return SettingsMenu->Check(ID_MAINWIN_AUTOLOGIN_ACCOUNT, false);
+	if (LoginName==wxEmptyString) return SettingsMenu->Check(ID_MAINWIN_AUTOLOGIN_ACCOUNT, false);
 	if (SettingsMenu->IsChecked(ID_MAINWIN_AUTOLOGIN_ACCOUNT))
 		MoosIni->Write(wxT("autologin"), Base64Encode(LoginName));
 	else
@@ -20,7 +20,7 @@ void MainFrame::OnAutoLoginAccount(wxCommandEvent& event) {
 
 void MainFrame::OnBeepSound(wxCommandEvent& event) {
 	if (SettingsMenu->IsChecked(ID_MAINWIN_SOUND_ON_BEEP)) {
-		wxFileDialog tmp(this, LangIni->Read(wxT("translations/menus/settings/soundonbeep"), wxT("Play sound on beep")), wxT(""), MoosIni->Read(wxT("beepsound"), wxT("%windir%\\Media\\notify.wav")), LangIni->Read(wxT("translations/other/soundfiles"), wxT("Sound Files"))+wxT(" (*.wav)|*.wav|")+LangIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+		wxFileDialog tmp(this, LangIni->Read(wxT("translations/menus/settings/soundonbeep"), wxT("Play sound on beep")), wxEmptyString, MoosIni->Read(wxT("beepsound"), wxT("%windir%\\Media\\notify.wav")), LangIni->Read(wxT("translations/other/soundfiles"), wxT("Sound Files"))+wxT(" (*.wav)|*.wav|")+LangIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 		if (tmp.ShowModal()!=wxID_OK) return SettingsMenu->Check(ID_MAINWIN_SOUND_ON_BEEP, false);
 		MoosIni->Write(wxT("beepsound"), tmp.GetPath());
 		MoosIni->Write(wxT("enablebeep"), true);
@@ -62,7 +62,7 @@ void MainFrame::OnChangeFont(wxCommandEvent & WXUNUSED(event)) {
 }
 
 void MainFrame::OnSelectLanguage(wxCommandEvent & WXUNUSED(event)) {
-	wxFileDialog tmp(this, LangIni->Read(wxT("translations/menus/settings/selectlanguage"), wxT("Select Language...")), wxT(""), MoosIni->Read(wxT("languagefile"), wxT("")), LangIni->Read(wxT("translations/other/inifiles"), wxT("Ini Files"))+wxT(" (*.ini)|*.ini|")+LangIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+	wxFileDialog tmp(this, LangIni->Read(wxT("translations/menus/settings/selectlanguage"), wxT("Select Language...")), wxEmptyString, MoosIni->Read(wxT("languagefile"), wxEmptyString), LangIni->Read(wxT("translations/other/inifiles"), wxT("Ini Files"))+wxT(" (*.ini)|*.ini|")+LangIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 	if (tmp.ShowModal()!=wxID_OK) return;
 	MoosIni->Write(wxT("languagefile"), tmp.GetPath());
 	wxFileInputStream lang(tmp.GetPath());
@@ -96,7 +96,7 @@ void MainFrame::OnSelectLanguage(wxCommandEvent & WXUNUSED(event)) {
 	MenuBar->SetMenuLabel(3, LangIni->Read(wxT("translations/menus/settings"), wxT("Settings")));
 	MenuBar->SetMenuLabel(4, LangIni->Read(wxT("translations/menus/help"), wxT("?")));
 	WhisperCheckbox->SetLabel(LangIni->Read(wxT("translations/whisper"), wxT("Whisper")));
-	SetStatusText(wxT(""));
+	SetStatusText(wxEmptyString);
 	if (!Socket->IsConnected()) {
 		SetStatusText(LangIni->Read(wxT("translations/statusbar/notconnected"), wxT("Not connected")));
 	}

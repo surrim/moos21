@@ -59,15 +59,15 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 		cancelbutton(0),
 		WhoisData(0),
 		Socket(0) {
-	WhoisData[5].Replace(wxT("\t"), wxT(""));
-	WhoisData[5].Replace(wxT("\n"), wxT(""));
+	WhoisData[5].Replace(wxT("\t"), wxEmptyString);
+	WhoisData[5].Replace(wxT("\n"), wxEmptyString);
 	WhoisData[5].Replace(wxT("%25"), wxT("%"));
 	WhoisData[5].Replace(wxT("%22"), wxT("\""));
-	WhoisData[7].Replace(wxT("\t"), wxT(""));
-	WhoisData[7].Replace(wxT("\n"), wxT(""));
+	WhoisData[7].Replace(wxT("\t"), wxEmptyString);
+	WhoisData[7].Replace(wxT("\n"), wxEmptyString);
 	WhoisData[7].Replace(wxT("%25"), wxT("%"));
 	WhoisData[7].Replace(wxT("%22"), wxT("\""));
-	WhoisData[10].Replace(wxT("\t"), wxT(""));
+	WhoisData[10].Replace(wxT("\t"), wxEmptyString);
 	WhoisData[10].Replace(wxT("%25"), wxT("%"));
 	WhoisData[10].Replace(wxT("%22"), wxT("\""));
 	SetFont(Font);
@@ -83,7 +83,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	licq=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/icq"), wxT("ICQ")));
 	lplace=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/place"), wxT("Place")));
 	playername=new wxTextCtrl(this, -1, WhoisData[1], wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	playerstatus=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	playerstatus=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
 	if (WhoisData[4][0]=='#') {
 		playerstatus->SetValue(Format(LangIni->Read(wxT("translations/profile/onchannel"), wxT("On channel <%0>")), WhoisData[4].Mid(1)));
 	} else if (WhoisData[4][0]=='$') {
@@ -92,7 +92,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 		playerstatus->SetValue(LangIni->Read(wxT("translations/profile/notloggedin"), wxT("Not logged")));
 	}
 	email=new wxTextCtrl(this, -1, WhoisData[5], wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-	icq=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	icq=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
 	if (WhoisData[6]!=wxT("4294967295")) {
 		icq->SetValue(WhoisData[6]);
 	}
@@ -112,13 +112,13 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	BoxSizer=new wxBoxSizer(wxHORIZONTAL);
 	lage=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/age"), wxT("Age")));
 	lgender=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/gender"), wxT("Gender")));
-	age=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxSize(2*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
+	age=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(2*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
 	if (WhoisData[8]!=wxT("255")) {
 		age->SetValue(WhoisData[8]);
 	}
 	gender=new wxChoice(this, -1, wxDefaultPosition, wxSize(3*GetCharHeight() ,-1));
 	if (IsYourself) {
-		gender->Append(wxT(""));
+		gender->Append(wxEmptyString);
 		gender->Append(LangIni->Read(wxT("translations/profile/male"), wxT("M")));
 		gender->Append(LangIni->Read(wxT("translations/profile/female"), wxT("F")));
 		if (WhoisData[9]==wxT("0")) {
@@ -134,7 +134,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 		} else if (WhoisData[9]==wxT("1")) {
 			gender->Append(LangIni->Read(wxT("translations/profile/female"), wxT("F")));
 		} else {
-			gender->Append(wxT(""));
+			gender->Append(wxEmptyString);
 		}
 		gender->SetSelection(0);
 	}
@@ -162,7 +162,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	llastplayed=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/lastplayed"), wxT("Last played")));
 	lstatistics=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/statistics"), wxT("Statistic")));
 	gamename=new wxChoice(this, -1);
-	lastplayed=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+	lastplayed=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
 	statistics=new wxChoice(this, -1);
 	GridSizer2->Add(lgamename, 0, wxALIGN_CENTER_VERTICAL);
 	GridSizer2->Add(gamename, 1, wxEXPAND|wxALL);
@@ -181,11 +181,11 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	ldisconnects=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/disconnects"), wxT("Disconnects")));
 	lposition=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/position"), wxT("Position")));
 	lrank=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/rank"), wxT("Rank")));
-	victories=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
-	defeats=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
-	disconnects=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
-	position=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
-	rank=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
+	victories=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
+	defeats=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
+	disconnects=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
+	position=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
+	rank=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(3*GetCharHeight(), -1), wxTE_READONLY|wxTE_CENTRE);
 	GridSizer3->Add(lvictories, 1, wxALIGN_CENTER_VERTICAL);
 	GridSizer3->Add(victories, 1, wxEXPAND|wxALL);
 	GridSizer3->Add(lposition, 1, wxALIGN_CENTER_VERTICAL);
@@ -265,7 +265,7 @@ void WhoisDialog::OnChoice(wxCommandEvent &event) {
 		double tmp;
 		WhoisData[gamename->GetSelection()*37+12].ToDouble(&tmp);
 		wxDateTime tmp2(tmp+2415018.58334369);
-		lastplayed->SetValue(wxString(wxT("")).Format(wxT("%.2i.%.2i.%.4i %.2i:%.2i:%.2i"), tmp2.GetDay(), tmp2.GetMonth()+1, tmp2.GetYear(), tmp2.GetHour(), tmp2.GetMinute(), tmp2.GetSecond()));
+		lastplayed->SetValue(wxString(wxEmptyString).Format(wxT("%.2i.%.2i.%.4i %.2i:%.2i:%.2i"), tmp2.GetDay(), tmp2.GetMonth()+1, tmp2.GetYear(), tmp2.GetHour(), tmp2.GetMinute(), tmp2.GetSecond()));
 
 		int i=gamename->GetSelection()*37+statistics->GetSelection()*7+13;
 		victories->SetValue(WhoisData[i]);
@@ -279,26 +279,26 @@ void WhoisDialog::OnChoice(wxCommandEvent &event) {
 void WhoisDialog::OnApply(wxCommandEvent &event) {
 	if (Socket->IsConnected()) {
 		wxString tmp=email->GetValue();
-		tmp.Replace(wxT("\t"), wxT(""));
-		tmp.Replace(wxT("\n"), wxT(""));
+		tmp.Replace(wxT("\t"), wxEmptyString);
+		tmp.Replace(wxT("\n"), wxEmptyString);
 		tmp.Replace(wxT("%"), wxT("%25"));
 		tmp.Replace(wxT("\""), wxT("%22"));
 		email->SetValue(tmp);
 		tmp=place->GetValue();
-		tmp.Replace(wxT("\t"), wxT(""));
-		tmp.Replace(wxT("\n"), wxT(""));
+		tmp.Replace(wxT("\t"), wxEmptyString);
+		tmp.Replace(wxT("\n"), wxEmptyString);
 		tmp.Replace(wxT("%"), wxT("%25"));
 		tmp.Replace(wxT("\""), wxT("%22"));
 		place->SetValue(tmp);
 		tmp=description->GetValue();
-		tmp.Replace(wxT("\t"), wxT(""));
+		tmp.Replace(wxT("\t"), wxEmptyString);
 		tmp.Replace(wxT("%"), wxT("%25"));
 		tmp.Replace(wxT("\""), wxT("%22"));
 		description->SetValue(tmp);
 
 		tmp=wxT("/update \"")+playername->GetValue()+wxT("\" \"")+email->GetValue()+wxT("\" \"");
 		long int tmp2=0xFFFFFFFF;
-		if (icq->GetValue()!=wxT("")) {
+		if (icq->GetValue()!=wxEmptyString) {
 			icq->GetValue().ToLong(&tmp2);
 		}
 		tmp+=tmp.Format(wxT("%i"), tmp2)+wxT("\" \"")+place->GetValue()+wxT("\" \"");

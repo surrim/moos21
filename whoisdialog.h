@@ -15,6 +15,7 @@ class wxButton;
 class WhoisDialog: public wxDialog {
 	public:
 		WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString WhoisData, bool IsYourself, wxSocketClient* Socket, wxFont Font);
+
 		void OnChoice(wxCommandEvent &event);
 		void OnApply(wxCommandEvent &event);
 		void OnCancel(wxCommandEvent &event);

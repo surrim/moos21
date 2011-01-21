@@ -9,7 +9,7 @@
 #include <wx/menu.h>
 
 void MainFrame::OnSaveChat(wxCommandEvent & WXUNUSED(event)) {
-	wxFileDialog *tmp=new wxFileDialog(this, LangIni->Read(wxT("translations/menus/view/savechathistory"), wxT("Save chat...")), wxT(""), wxT("moos.htm"), LangIni->Read(wxT("translations/other/htmlfiles"), wxT("HTML Files"))+wxT(" (*.htm;*.html)|*.htm;*.html|")+LangIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_SAVE);
+	wxFileDialog *tmp=new wxFileDialog(this, LangIni->Read(wxT("translations/menus/view/savechathistory"), wxT("Save chat...")), wxEmptyString, wxT("moos.htm"), LangIni->Read(wxT("translations/other/htmlfiles"), wxT("HTML Files"))+wxT(" (*.htm;*.html)|*.htm;*.html|")+LangIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_SAVE);
 	if (tmp->ShowModal()==wxID_OK) {
 		if ((tmp->GetPath().SubString(tmp->GetPath().Length()-4, tmp->GetPath().Length())==wxT(".htm")) || (tmp->GetPath().SubString(tmp->GetPath().Length()-5, tmp->GetPath().Length())==wxT(".html"))) {
 			wxFile file(tmp->GetPath(), wxFile::write);
@@ -36,7 +36,7 @@ void MainFrame::OnDeleteChat(wxCommandEvent & WXUNUSED(event)) {
 }
 
 void MainFrame::OnColorSelect(wxCommandEvent & WXUNUSED(event)) {
-	if (LoginName==wxT("")) return;
+	if (LoginName==wxEmptyString) return;
 	wxColourData tmp;
 	tmp.SetChooseFull(true);
 	tmp.SetCustomColour(0, Long2Color(MoosIni->Read(wxT("accounts/")+Base64Encode(LoginName)+wxT("/chatcolor"),
@@ -50,7 +50,7 @@ void MainFrame::OnColorSelect(wxCommandEvent & WXUNUSED(event)) {
 }
 
 void MainFrame::OnManualColorCode(wxCommandEvent & WXUNUSED(event)) {
-	if (LoginName==wxT("")) return;
+	if (LoginName==wxEmptyString) return;
 	InputDialog *tmp;
 	if (MoosIni->Read(wxT("accounts/")+Base64Encode(LoginName)+wxT("/chatcolor"), LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C))
 			!=LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)) {
@@ -64,7 +64,7 @@ void MainFrame::OnManualColorCode(wxCommandEvent & WXUNUSED(event)) {
 							LangIni->Read(wxT("translations/dialogtext/entercolorcode"), wxT("Please enter Colorcode")));
 	}
 	if (tmp->ShowModal()!=wxID_OK) return;
-	if (tmp->GetValue()==wxT("")) MoosIni->DeleteEntry(wxT("accounts/")+Base64Encode(LoginName)+wxT("/chatcolor"));
+	if (tmp->GetValue()==wxEmptyString) MoosIni->DeleteEntry(wxT("accounts/")+Base64Encode(LoginName)+wxT("/chatcolor"));
 	if (tmp->GetValue().Len()!=12 || tmp->GetValue()[0]!='<' || tmp->GetValue()[1]!='0'
 			|| !(tmp->GetValue()[2]=='x' || tmp->GetValue()[2]=='X')
 			|| !IsHex(tmp->GetValue().Mid(3, 8)) || tmp->GetValue()[11]!='>') return;

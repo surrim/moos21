@@ -16,7 +16,7 @@ void MainFrame::OnLoginAs(wxCommandEvent & WXUNUSED(event)) {
 	while (MoosIni->GetNextGroup(tmp3, i)) {
 		tmp.Add(Base64Decode(tmp3));
 	}
-	MoosIni->SetPath(wxT(""));
+	MoosIni->SetPath(wxEmptyString);
 	tmp.Sort();
 	InputDialog *tmp2=new InputDialog(this, LangIni, Font.GetChosenFont(), LangIni->Read(wxT("translations/menus/moos/loginas"), wxT("Login as...")),
 									  LangIni->Read(wxT("translations/dialogtext/selectusername"), wxT("Please select an username")), 2,

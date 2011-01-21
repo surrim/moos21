@@ -32,11 +32,11 @@ InputDialog::InputDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, w
 	SetFont(Font);
 	MainSizer=new wxBoxSizer(wxVERTICAL);
 	MainSizer->AddSpacer(4);
-	if (Text!=wxT("")) {
-		MainSizer->AddSpacer(-12);
+	if (Text!=wxEmptyString) {
+		//MainSizer->AddSpacer(-12);
 		ltext=new wxStaticText(this, -1, Text);
 		MainSizer->Add(ltext, 0, wxEXPAND|wxALL, 16);
-		MainSizer->AddSpacer(-16);
+		//MainSizer->AddSpacer(-16);
 	}
 	if (Style>=2) {
 		MainSizer->AddSpacer(-12);
@@ -52,9 +52,9 @@ InputDialog::InputDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, w
 		MainSizer->AddSpacer(-12);
 		if (Style==2) MainSizer->AddSpacer(-5);
 		if (Style!=1)
-			input=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxSize(120, -1));
+			input=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(120, -1));
 		else
-			input=new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition, wxSize(120, -1), wxTE_PASSWORD);
+			input=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(120, -1), wxTE_PASSWORD);
 		input->SetValue(Default);
 		MainSizer->Add(input, 0, wxEXPAND|wxALL, 16);
 		MainSizer->AddSpacer(-16);
@@ -98,7 +98,7 @@ void InputDialog::OnChoice(wxCommandEvent &event) {
 }
 
 void InputDialog::OnOK(wxCommandEvent &event) {
-	if (Style<=1 || Style==4 || saved!=wxT("")) {
+	if (Style<=1 || Style==4 || saved!=wxEmptyString) {
 		EndModal(wxID_OK);
 	}
 }

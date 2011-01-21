@@ -92,7 +92,7 @@ void MainFrame::OnIncomingData() {
 		if (uncompress((Bytef*)cbuffer, &cbufferlen, (const Bytef*)(buffer+4), packetlen-4)==Z_OK) {
 			unsigned int packettype=*((unsigned int*)cbuffer);
 			unsigned int contentlen=*((unsigned int*)(cbuffer+4));
-			wxString content=wxT("");
+			wxString content;
 			if (contentlen>packetlen) {
 				contentlen=packetlen-8;
 			}
@@ -104,8 +104,8 @@ void MainFrame::OnIncomingData() {
 				if (stringlen>contentlen) {
 					//Aha das ist also dieser komische Ident
 				} else { //Welcome msg
-					wxString identifier=wxT("");
-					wxString welcomemsg=wxT("");
+					wxString identifier;
+					wxString welcomemsg;
 
 					for (i=0;i!=stringlen;++i) {
 						identifier+=cbuffer[i+12];
@@ -144,12 +144,12 @@ void MainFrame::OnIncomingData() {
 					InfoDialog(this, LangIni, Font.GetChosenFont(), wxT("moos2.1"), LangIni->Read(wxT("translations/dialogtext/illegalusername"),
 							   wxT("Error: Your user name contains invalid characters"))).ShowModal();
 					MoosIni->DeleteGroup(wxT("accounts/")+Base64Encode(LoginName));
-					LoginName=wxT("");
+					LoginName=wxEmptyString;
 				} else if (content==wxT("translateInvalidUserName")) {
 					InfoDialog(this, LangIni, Font.GetChosenFont(), wxT("moos2.1"),
 							   LangIni->Read(wxT("translations/dialogtext/userdoesntexist"), wxT("Error: Invalid user name"))).ShowModal();
 					MoosIni->DeleteGroup(wxT("accounts/")+Base64Encode(LoginName));
-					LoginName=wxT("");
+					LoginName=wxEmptyString;
 				} else if (content==wxT("translateInvalidPassword")) {
 					InfoDialog(this, LangIni, Font.GetChosenFont(), wxT("moos2.1"),
 							   LangIni->Read(wxT("translations/dialogtext/wrongpassword"), wxT("Error: Invalid password"))).ShowModal();
@@ -161,7 +161,7 @@ void MainFrame::OnIncomingData() {
 				} else {
 					InfoDialog(this, LangIni, Font.GetChosenFont(), wxT("moos2.1"), content).ShowModal();
 					MoosIni->DeleteGroup(wxT("accounts/")+Base64Encode(LoginName));
-					LoginName=wxT("");
+					LoginName=wxEmptyString;
 				}
 				SetStatusText(LangIni->Read(wxT("translations/statusbar/notconnected"), wxT("Not connected")));
 				if (Socket->IsConnected()) {
@@ -207,16 +207,16 @@ void MainFrame::ParseProcessCommand(wxString strData) {
 	// ----------- Chat
 	if (parsed[0]==wxT("/send")) {
 		RefreshAutocomplete(parsed[1]);
-		parsed[2].Replace(wxT("\n"), wxT(""));
-		parsed[2].Replace(wxT("\t"), wxT(""));
+		parsed[2].Replace(wxT("\n"), wxEmptyString);
+		parsed[2].Replace(wxT("\t"), wxEmptyString);
 		if (!IsIgnored(parsed[1]) && !(SettingsMenu->IsChecked(ID_MAINWIN_DISABLE_SLAPS)
 									   && parsed[2].Find(wxT("<0xFF0000FF>slaps <0xFF2153E8>"))!=-1 && parsed[2].Find(wxT("<0xFF0000FF> with "))!=-1))
 			Message(LangIni->Read(wxT("translations/channel/message"), wxT("<%0>: <%1>")), parsed[1], parsed[2]);
 	} else if (parsed[0]==wxT("/msg")) {
 		RefreshAutocomplete(parsed[2]);
 		if (IsIgnored(parsed[2])) return;
-		parsed[3].Replace(wxT("\n"), wxT(""));
-		parsed[3].Replace(wxT("\t"), wxT(""));
+		parsed[3].Replace(wxT("\n"), wxEmptyString);
+		parsed[3].Replace(wxT("\t"), wxEmptyString);
 		Message(LangIni->Read(wxT("translations/channel/whispermessage"), wxT("<0xFFFFFFFF>[<%1> (<%0>)]: <%3>")), parsed[1], parsed[2], parsed[3], parsed[4]);
 		if (IsIconized() && parsed[3][0]!='#' && parsed[3][0]!='$') RequestUserAttention();
 	} else if (parsed[0]==wxT("/msgc")) {
@@ -245,7 +245,7 @@ void MainFrame::ParseProcessCommand(wxString strData) {
 		RefreshAutocomplete(parsed[1]);
 		AddUser(parsed[1]);
 		if (IsIgnored(parsed[1])) return;
-		if (parsed[3]!=wxT(""))
+		if (parsed[3]!=wxEmptyString)
 			Message(LangIni->Read(wxT("translations/channel/events/userenterchannel"), wxT("<0xA050FFFF>[<%T>] User <0xFF80FFFF><%0><0xA050FFFF> (<%1>) (comming from: <%2>) enter channel")), parsed[1], GetVersion(parsed[2]), parsed[3]);
 		else
 			Message(LangIni->Read(wxT("translations/channel/events/userenterearthnet"), wxT("<0xA050FFFF>[<%T>] User <0xFF80FFFF><%0><0xA050FFFF> (<%1>) enter channel")), parsed[1], GetVersion(parsed[2]));
@@ -300,7 +300,7 @@ void MainFrame::ParseProcessCommand(wxString strData) {
 				&& parsed[4]==wxT("now") && parsed[5]==wxT("known") && parsed[6]==wxT("as")) {
 			MoosIni->SetPath(wxT("accounts/"));
 			MoosIni->RenameGroup(Base64Encode(LoginName), Base64Encode(parsed[7]));
-			MoosIni->SetPath(wxT(""));
+			MoosIni->SetPath(wxEmptyString);
 			LoginName=parsed[7];
 		}
 	} else if (parsed[0]==wxT("/syncstats")) {

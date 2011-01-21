@@ -15,8 +15,8 @@ void MainFrame::OnWhoisUser(wxCommandEvent &event) {
 		wxArrayString tmp2=SeenUsers;
 		tmp2.Sort();
 		InputDialog *tmp=new InputDialog(this, LangIni, Font.GetChosenFont(), LangIni->Read(wxT("translations/menus/user/profile"), wxT("Userinformation...")),
-										 LangIni->Read(wxT("translations/dialogtext/selectusername"), wxT("Please select an username")), 2, wxT(""), tmp2);
-		if (tmp->ShowModal()==wxID_OK && tmp->GetValue()!=wxT("")) {
+										 LangIni->Read(wxT("translations/dialogtext/selectusername"), wxT("Please select an username")), 2, wxEmptyString, tmp2);
+		if (tmp->ShowModal()==wxID_OK && tmp->GetValue()!=wxEmptyString) {
 			Write(wxT("/whois \"")+tmp->GetValue()+wxT("\""));
 		}
 		return;
@@ -40,8 +40,8 @@ void MainFrame::OnSlapUser(wxCommandEvent &event) {
 		}
 		InputDialog *tmp=new InputDialog(this, LangIni, Font.GetChosenFont(),
 										 LangIni->Read(wxT("translations/menus/user/slap"), wxT("Slap...")),
-										 LangIni->Read(wxT("translations/dialogtext/selectusername"), wxT("Please select an username")), 3, wxT(""), tmp3);
-		if (tmp->ShowModal()!=wxID_OK || tmp->GetValue()==wxT("")) {
+										 LangIni->Read(wxT("translations/dialogtext/selectusername"), wxT("Please select an username")), 3, wxEmptyString, tmp3);
+		if (tmp->ShowModal()!=wxID_OK || tmp->GetValue()==wxEmptyString) {
 			return;
 		}
 		users.Add(tmp->GetValue());
@@ -52,7 +52,7 @@ void MainFrame::OnSlapUser(wxCommandEvent &event) {
 	}
 	InputDialog *tmp=new InputDialog(this, LangIni, Font.GetChosenFont(), LangIni->Read(wxT("translations/menus/user/slap"), wxT("Slap...")),
 									 LangIni->Read(wxT("translations/dialogtext/enterslap"), wxT("Please enter slap text")));
-	if (tmp->ShowModal()!=wxID_OK || tmp->GetValue()==wxT("")) {
+	if (tmp->ShowModal()!=wxID_OK || tmp->GetValue()==wxEmptyString) {
 		return;
 	}
 	wxString tmp2=tmp->GetValue();
@@ -71,8 +71,8 @@ void MainFrame::OnIgnoreUser(wxCommandEvent &event) {
 		tmp2.Sort();
 		InputDialog *tmp=new InputDialog(this, LangIni, Font.GetChosenFont(),
 										 LangIni->Read(wxT("translations/menus/user/ignore"), wxT("Ignore")),
-										 LangIni->Read(wxT("translations/dialogtext/selectusername"), wxT("Please select an username")), 2, wxT(""), tmp2);
-		if (tmp->ShowModal()==wxID_OK && tmp->GetValue()!=wxT("")) {
+										 LangIni->Read(wxT("translations/dialogtext/selectusername"), wxT("Please select an username")), 2, wxEmptyString, tmp2);
+		if (tmp->ShowModal()==wxID_OK && tmp->GetValue()!=wxEmptyString) {
 			IgnoreUser(tmp->GetValue());
 			return;
 		}
@@ -87,7 +87,7 @@ void MainFrame::OnIgnoreList(wxCommandEvent & WXUNUSED(event)) {
 	wxArrayInt tmp4;
 	MoosIni->SetPath(wxT("ignored/"));
 	if (!MoosIni->GetFirstEntry(tmp2, i)) {
-		MoosIni->SetPath(wxT(""));
+		MoosIni->SetPath(wxEmptyString);
 		return;
 	}
 	tmp.Add(Base64Decode(tmp2));
@@ -98,11 +98,11 @@ void MainFrame::OnIgnoreList(wxCommandEvent & WXUNUSED(event)) {
 			tmp4.Add(tmp.GetCount()-1);
 		}
 	}
-	MoosIni->SetPath(wxT(""));
+	MoosIni->SetPath(wxEmptyString);
 	InputDialog *tmp3=new InputDialog(this, LangIni, Font.GetChosenFont(),
 									  LangIni->Read(wxT("translations/menus/user/ignorelist"), wxT("Ignorelist...")),
 									  LangIni->Read(wxT("translations/dialogtext/selectuserstounignore"),
-													wxT("Please select all users you want to remove from your Ignore List")), 4, wxT(""), tmp);
+													wxT("Please select all users you want to remove from your Ignore List")), 4, wxEmptyString, tmp);
 	tmp3->SetSelections(tmp4);
 	if (tmp3->ShowModal()==wxID_OK) {
 		for (size_t i=0;i!=tmp3->GetSelections().GetCount();++i) {

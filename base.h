@@ -24,15 +24,16 @@ struct version {
 };
 
 class MoosApp: public wxApp {
-public:
-	virtual bool OnInit();
+	public:
+		virtual bool OnInit();
 };
 
 class MainFrame: public wxFrame {
 	public:
 		MainFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
 		~MainFrame();
-	//base.cpp - Common
+
+		//base.cpp - Common
 		void OnSelectChannel(wxCommandEvent &event);
 		void OnSelectUser(wxCommandEvent& event);
 		void OnWhisperClick(wxCommandEvent& event);
@@ -45,7 +46,8 @@ class MainFrame: public wxFrame {
 		void RemoveChannel(wxString Channel);
 		void RemoveAllChannelsAndUsers();
 		void RefreshAutocomplete(wxString User, bool Event=true);
-	//connection.cpp - Socket
+
+		//connection.cpp - Socket
 		void OnSocketEvent(wxSocketEvent& event);
 		void OnConnectionLost();
 		void OnConnect();
@@ -57,11 +59,13 @@ class MainFrame: public wxFrame {
 		std::string GenerateLoginMessage(wxString User, wxString Password);
 		void Write(wxString Data);
 		void LoginAs(wxString User, wxString Password, wxString Server=L"", wxString Port=L"");
-	//moosmenu.cpp - Moos Menu
+
+		//moosmenu.cpp - Moos Menu
 		void OnLoginAs(wxCommandEvent &event);
 		void OnLogout(wxCommandEvent &event);
 		void OnExit(wxCommandEvent &event);
-	//usermenu.cpp - User Menu
+
+		//usermenu.cpp - User Menu
 		void OnWhoisUser(wxCommandEvent &event);
 		void OnSlapUser(wxCommandEvent &event);
 		void OnIgnoreUser(wxCommandEvent &event);
@@ -72,26 +76,29 @@ class MainFrame: public wxFrame {
 		bool IsIgnored(wxString User);
 		void RemoveUser(wxString User);
 		void RemoveAllUsers();
-	//viewmenu.cpp - Ansicht Menu
+
+		//viewmenu.cpp - Ansicht Menu
 		void OnSaveChat(wxCommandEvent &event);
 		void OnFreezeChat(wxCommandEvent & WXUNUSED(event));
 		void OnDeleteChat(wxCommandEvent &event);
 		void OnColorSelect(wxCommandEvent & WXUNUSED(event));
 		void OnManualColorCode(wxCommandEvent & WXUNUSED(event));
-	//settingsmenu.cpp - Settings Menu
+
+		//settingsmenu.cpp - Settings Menu
 		void OnAutoLoginAccount(wxCommandEvent& event);
 		void OnBeepSound(wxCommandEvent& event);
 		void OnDisableSlaps(wxCommandEvent& event);
 		void OnChangeFont(wxCommandEvent & WXUNUSED(event));
 		void OnSelectLanguage(wxCommandEvent & WXUNUSED(event));
-	//helpmenu.cpp - Help Menu
+
+		//helpmenu.cpp - Help Menu
 		void OnOnlineReadme(wxCommandEvent &event);
 		void OnMailBugs(wxCommandEvent &event);
 		void OnAbout(wxCommandEvent &event);
 	private:
 		MainFrame(const MainFrame& cc);
 		MainFrame& operator=(const MainFrame& cc);
-	//Variablen
+
 		wxBoxSizer *MainSizer;
 		wxBoxSizer *ListSizer;
 		wxBoxSizer *ChatSizer;
