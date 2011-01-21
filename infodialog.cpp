@@ -22,7 +22,7 @@ InfoDialog::InfoDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, wxS
 	SetFont(Font);
 	MainSizer=new wxBoxSizer(wxVERTICAL);
 	MainSizer->AddSpacer(4);
-	if (Text!=wxT("")) {
+	if (Text!=wxEmptyString) {
 		MainSizer->AddSpacer(-12);
 		ltext=new wxStaticText(this, -1, Text);
 		MainSizer->Add(ltext, 1, wxEXPAND|wxALL, 16);
