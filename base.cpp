@@ -405,7 +405,7 @@ void MainFrame::Message(wxString Text, const wxString Input0, const wxString Inp
 	Text.Replace(wxT("%25"), wxT("%"));
 
 	wxString tmp;
-	ChatView->SetDefaultStyle(wxTextAttr(Long2Color(LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)), wxNullColour, Font.GetChosenFont()));
+	ChatView->SetDefaultStyle(wxTextAttr(Long2Color(LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)), wxColour(31, 48, 56), Font.GetChosenFont()));
 	size_t i=0, opentag=0;
 	while (i!=Text.Len()) {
 		if (Text[i]!='<') {
