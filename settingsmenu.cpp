@@ -8,6 +8,7 @@
 #include <wx/menu.h>
 #include <wx/settings.h>
 #include <wx/socket.h>
+#include <wx/stdpaths.h>
 #include <wx/wfstream.h>
 
 void MainFrame::OnAutoLoginAccount(wxCommandEvent& event) {
@@ -62,7 +63,7 @@ void MainFrame::OnChangeFont(wxCommandEvent & WXUNUSED(event)) {
 }
 
 void MainFrame::OnSelectLanguage(wxCommandEvent & WXUNUSED(event)) {
-	wxFileDialog tmp(this, LangIni->Read(wxT("translations/menus/settings/selectlanguage"), wxT("Select Language...")), wxEmptyString, MoosIni->Read(wxT("languagefile"), wxEmptyString), LangIni->Read(wxT("translations/other/inifiles"), wxT("Ini Files"))+wxT(" (*.ini)|*.ini|")+LangIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+	wxFileDialog tmp(this, LangIni->Read(wxT("translations/menus/settings/selectlanguage"), wxT("Select Language...")), wxEmptyString, MoosIni->Read(wxT("languagefile"), wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPath()+wxFileName::GetPathSeparator()+wxT("*.ini")), LangIni->Read(wxT("translations/other/inifiles"), wxT("Ini Files"))+wxT(" (*.ini)|*.ini|")+LangIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 	if (tmp.ShowModal()!=wxID_OK) return;
 	MoosIni->Write(wxT("languagefile"), tmp.GetPath());
 	wxFileInputStream lang(tmp.GetPath());
