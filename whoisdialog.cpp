@@ -74,7 +74,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	WhoisDialog::WhoisData=WhoisData;
 	WhoisDialog::Socket=Socket;
 	MainSizer=new wxBoxSizer(wxVERTICAL);
-	MainSizer->AddSpacer(-8);
+	MainSizer->AddSpacer(6);
 	GridSizer=new wxFlexGridSizer(2, 4, 8);
 	GridSizer->AddGrowableCol(1);
 	lplayername=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/playername"), wxT("Player name")));
@@ -107,7 +107,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	GridSizer->Add(icq, 1, wxEXPAND|wxALL);
 	GridSizer->Add(lplace, 0, wxALIGN_CENTER_VERTICAL);
 	GridSizer->Add(place, 1, wxEXPAND|wxALL);
-	MainSizer->Add(GridSizer, 1, wxEXPAND|wxALL, 16);
+	MainSizer->Add(GridSizer, 1, wxEXPAND|wxLEFT|wxRIGHT, 12);
 
 	BoxSizer=new wxBoxSizer(wxHORIZONTAL);
 	lage=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/age"), wxT("Age")));
@@ -138,7 +138,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 		}
 		gender->SetSelection(0);
 	}
-	MainSizer->AddSpacer(-28);
+	MainSizer->AddSpacer(6);
 	BoxSizer->Add(lage, 0, wxALIGN_CENTER_VERTICAL);
 	BoxSizer->AddSpacer(4);
 	BoxSizer->Add(age, 0, wxALIGN_CENTER_VERTICAL);
@@ -147,14 +147,14 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	BoxSizer->Add(lgender, 0, wxALIGN_CENTER_VERTICAL);
 	BoxSizer->AddSpacer(4);
 	BoxSizer->Add(gender, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(BoxSizer, 0, wxEXPAND|wxALL, 16);
+	MainSizer->Add(BoxSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
 
 	ldescription=new wxStaticText(this, -1, LangIni->Read(wxT("translations/profile/description"), wxT("Description")));
 	description=new wxTextCtrl(this, -1, WhoisData[10], wxDefaultPosition, wxSize(-1, 4*GetCharHeight()), wxTE_MULTILINE|wxTE_READONLY|wxVSCROLL);
-	MainSizer->AddSpacer(-28);
-	MainSizer->Add(ldescription, 0, wxEXPAND|wxALL, 16);
-	MainSizer->AddSpacer(-28);
-	MainSizer->Add(description, 0, wxEXPAND|wxALL, 16);
+	MainSizer->AddSpacer(6);
+	MainSizer->Add(ldescription, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
+	MainSizer->AddSpacer(6);
+	MainSizer->Add(description, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
 
 	GridSizer2=new wxFlexGridSizer(2, 4, 8);
 	GridSizer2->AddGrowableCol(1);
@@ -170,8 +170,8 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	GridSizer2->Add(lastplayed, 1, wxEXPAND|wxALL);
 	GridSizer2->Add(lstatistics, 0, wxALIGN_CENTER_VERTICAL);
 	GridSizer2->Add(statistics, 1, wxEXPAND|wxALL);
-	MainSizer->AddSpacer(-28);
-	MainSizer->Add(GridSizer2, 0, wxEXPAND|wxALL, 16);
+	MainSizer->AddSpacer(6);
+	MainSizer->Add(GridSizer2, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
 
 	GridSizer3=new wxFlexGridSizer(4, 4, 8);
 	GridSizer3->AddGrowableCol(0);
@@ -196,8 +196,8 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	GridSizer3->Add(rank, 1, wxEXPAND|wxALL);
 	GridSizer3->Add(ldisconnects, 1, wxALIGN_CENTER_VERTICAL);
 	GridSizer3->Add(disconnects, 1, wxEXPAND|wxALL);
-	MainSizer->AddSpacer(-28);
-	MainSizer->Add(GridSizer3, 0, wxEXPAND|wxALL, 16);
+	MainSizer->AddSpacer(6);
+	MainSizer->Add(GridSizer3, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
 
 	ButtonSizer=new wxBoxSizer(wxHORIZONTAL);
 	cancelbutton=new wxButton(this, wxID_CANCEL, LangIni->Read(wxT("translations/ok"), wxT("OK")));
@@ -218,9 +218,9 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 		description->SetEditable(true);
 		description->SetMaxLength(255);
 	}
-	MainSizer->AddSpacer(-28);
-	MainSizer->Add(ButtonSizer, 0, wxEXPAND|wxALL, 16);
-	MainSizer->AddSpacer(-8);
+	MainSizer->AddSpacer(6);
+	MainSizer->Add(ButtonSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
+	MainSizer->AddSpacer(6);
 
 	if (WhoisData.GetCount()>=47) {
 		statistics->Append(LangIni->Read(wxT("translations/profile/all"), wxT("All")));
@@ -257,7 +257,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString 
 	SetSizer(MainSizer);
 	SetInitialSize();
 	SetAutoLayout(true);
-	SetSize(-1, -1, GetCharHeight()*19+52, -1);
+	SetSize(wxDefaultCoord, wxDefaultCoord, GetCharHeight()*19+52, wxDefaultCoord);
 }
 
 void WhoisDialog::OnChoice(wxCommandEvent &event) {

@@ -29,16 +29,16 @@ InfoDialog::InfoDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, wxS
 	}
 	ButtonSizer=new wxBoxSizer(wxHORIZONTAL);
 	ButtonSizer->AddStretchSpacer();
-	if (Style) {
+	if (Style==1) {
 		button1=new wxButton(this, wxID_OK, LangIni->Read(wxT("translations/yes"), wxT("Yes")));
 		button2=new wxButton(this, wxID_CANCEL, LangIni->Read(wxT("translations/no"), wxT("No")));
 	} else {
 		button1=new wxButton(this, wxID_OK, LangIni->Read(wxT("translations/ok"), wxT("OK")));
 	}
-	ButtonSizer->Add(button1, 0, wxEXPAND|wxALL, 0);
+	ButtonSizer->Add(button1, 0, wxEXPAND|wxTOP|wxBOTTOM, 12);
 	if (Style==1) {
 		ButtonSizer->AddSpacer(6);
-		ButtonSizer->Add(button2, 0, wxEXPAND|wxALL, 0);
+		ButtonSizer->Add(button2, 0, wxEXPAND|wxTOP|wxBOTTOM, 12);
 	}
 	ButtonSizer->AddStretchSpacer();
 
