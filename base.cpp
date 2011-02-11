@@ -107,11 +107,11 @@ MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &si
 	}
 
 	int x=MoosIni->Read(wxT("layout/x"), wxDefaultCoord);
-	if (x<0 && x!=wxDefaultCoord) {
+	if ((x<0 && x!=wxDefaultCoord) || x>wxGetDisplaySize().GetWidth()) {
 		x=0;
 	}
 	int y=MoosIni->Read(wxT("layout/y"), wxDefaultCoord);
-	if (y<0 && y!=wxDefaultCoord) {
+	if ((y<0 && y!=wxDefaultCoord) || y>wxGetDisplaySize().GetHeight()) {
 		y=0;
 	}
 	int width=MoosIni->Read(wxT("layout/width"), 720);

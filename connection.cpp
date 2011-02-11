@@ -92,7 +92,7 @@ void MainFrame::OnIncomingData() {
 		if (uncompress((Bytef*)cbuffer, &cbufferlen, (const Bytef*)(buffer+4), packetlen-4)==Z_OK) {
 			unsigned int packettype=*((unsigned int*)cbuffer);
 			unsigned int contentlen=*((unsigned int*)(cbuffer+4));
-			wxString content;
+			std::string content;
 			if (contentlen>packetlen) {
 				contentlen=packetlen-8;
 			}
@@ -104,21 +104,21 @@ void MainFrame::OnIncomingData() {
 				if (stringlen>contentlen) {
 					//Aha das ist also dieser komische Ident
 				} else { //Welcome msg
-					wxString identifier;
-					wxString welcomemsg;
+					std::string identifier;
+					std::string welcomemsg;
 
 					for (i=0;i!=stringlen;++i) {
 						identifier+=cbuffer[i+12];
 					}
-					stringlen=*((unsigned int*)(cbuffer+12+identifier.Len()));
+					stringlen=*((unsigned int*)(cbuffer+12+identifier.size()));
 					for (i=0;i!=stringlen;i++) {
-						welcomemsg+=cbuffer[i+16+identifier.Len()];
+						welcomemsg+=cbuffer[i+16+identifier.size()];
 					}
 					wxIPV4address tmp;
 					Socket->GetPeer(tmp);
 					SetStatusText(Format(LangIni->Read(wxT("translations/statusbar/connected"), wxT("Connected with <%0> (<%1>)")), tmp.Hostname(), tmp.IPAddress()));
 					//detect Game Versions
-					unsigned int vdx=16+identifier.Len()+welcomemsg.Len()+44;
+					unsigned int vdx=16+identifier.size()+welcomemsg.size()+44;
 					unsigned int versionlen=0;
 					GameVersion.clear();
 					while (~cbuffer[vdx]) {
@@ -131,13 +131,20 @@ void MainFrame::OnIncomingData() {
 						GameVersion.push_back(tmp);
 						vdx+=5+versionlen;
 					}
-					if (identifier==wxT("EarthNet Beta Server")) {
-						welcomemsg.Replace(wxT("<*>"), wxT("<0xFFFFFFFF>"));
-						Message(welcomemsg);
-						AddUser(LoginName);
-						RefreshAutocomplete(LoginName);
-						MoosIni->Write(wxT("accounts/")+Base64Encode(LoginName)+wxT("/password"), Base64Encode(LoginPassword, true));
+
+					while (true) {
+						unsigned int foundPosition=welcomemsg.find("<*>");
+						if (foundPosition!=std::string::npos) {
+							welcomemsg=welcomemsg.substr(0, foundPosition)+"<0xFFFFFFFF>"+welcomemsg.substr(foundPosition+3);
+						} else {
+							break;
+						}
 					}
+
+					Message(welcomemsg);
+					AddUser(LoginName);
+					RefreshAutocomplete(LoginName);
+					MoosIni->Write(wxT("accounts/")+Base64Encode(LoginName)+wxT("/password"), Base64Encode(LoginPassword, true));
 				}
 			} else if (packettype==2) { //Error
 				if (content==wxT("translateInvalidCharactersInName")) {
