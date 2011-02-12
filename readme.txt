@@ -4,6 +4,10 @@
 
 moos 2.1 has been modified by surrim. Original work by mensi and CABAListic.
 
+Changes for 2.1.0.3062
+- polish translation fixed (thanks to advance)
+- end of line is now CR LF in translation files so you can edit them with notepad
+
 Changes for 2.1.0.3061
 - Fixed bug with restoring invalid window positions
 - welcome message is now replacing all "<*>" with white color code
