@@ -8,7 +8,7 @@
 #include <wx/sound.h>
 #include <wx/socket.h>
 #include <wx/fileconf.h>
-#include <zlib.h>
+#include <zlib/zlib.h>
 
 void MainFrame::OnSocketEvent(wxSocketEvent& event) {
 	switch (event.GetSocketEvent()) {
@@ -347,9 +347,9 @@ std::string MainFrame::GetInvertedLength(const unsigned int &Length) {
 
 std::string MainFrame::GenerateLoginMessage(wxString User, wxString Password) {
 	std::string sLogin=GetInvertedLength(User.Len());
-	sLogin+=User.mb_str();
+	sLogin+=User.To8BitData();
 	sLogin+=GetInvertedLength(Password.Len());
-	sLogin+=Password.mb_str();
+	sLogin+=Password.To8BitData();
 	sLogin+=GetInvertedLength(0);
 	sLogin+=GetInvertedLength(0);
 	sLogin=EncodeMessage(sLogin);
@@ -358,7 +358,7 @@ std::string MainFrame::GenerateLoginMessage(wxString User, wxString Password) {
 }
 
 void MainFrame::Write(wxString Data) {
-	if (Socket->IsConnected()) Socket->Write(Data.mb_str(), Data.length()+1);
+	if (Socket->IsConnected()) Socket->Write(Data.To8BitData(), Data.length()+1);
 }
 
 void MainFrame::LoginAs(wxString User, wxString Password, wxString Server, wxString Port) {
