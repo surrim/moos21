@@ -358,7 +358,16 @@ std::string MainFrame::GenerateLoginMessage(wxString User, wxString Password) {
 }
 
 void MainFrame::Write(wxString Data) {
-	if (Socket->IsConnected()) Socket->Write(Data.To8BitData(), Data.length()+1);
+	std::string data;
+	if (Data.IsAscii()) {
+		data=Data.ToAscii();
+	} else {
+		static const wxCSConv csconv(wxT("iso8859-1"));
+		size_t outSize;
+		const wxCharBuffer cb=csconv.cWC2MB(Data.data(), Data.size(), &outSize);
+		data=std::string(cb, outSize);
+	}
+	if (Socket->IsConnected() && !data.empty()) Socket->Write(data.c_str(), data.size()+1);
 }
 
 void MainFrame::LoginAs(wxString User, wxString Password, wxString Server, wxString Port) {

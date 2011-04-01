@@ -116,11 +116,11 @@ MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &si
 	}
 	int width=MoosIni->Read(wxT("layout/width"), 720);
 	if (x+width>wxGetDisplaySize().GetWidth()) {
-		width=wxDefaultCoord;
+		width=720;
 	}
 	int height=MoosIni->Read(wxT("layout/height"), 480);
 	if (y+height>wxGetDisplaySize().GetHeight()) {
-		height=wxDefaultCoord;
+		height=480;
 	}
 	SetSize(x, y, width, height);
 	if (MoosIni->Read(wxT("layout/maximized"), 0L)) {
@@ -398,8 +398,7 @@ void MainFrame::Message(wxString Text, const wxString Input0, const wxString Inp
 		ChatBuffer.Add(Text);
 		return;
 	}
-	Text.Replace(wxT("<*>"),
-				 Long2MoonCode(LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)));
+	Text.Replace(wxT("<*>"), Long2MoonCode(LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)));
 	Text.Replace(wxT("\\n"), wxEmptyString);
 	Text.Replace(wxT("%22"), wxT("\""));
 	Text.Replace(wxT("%25"), wxT("%"));
