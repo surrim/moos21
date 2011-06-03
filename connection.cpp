@@ -8,7 +8,7 @@
 #include <wx/sound.h>
 #include <wx/socket.h>
 #include <wx/fileconf.h>
-#include <zlib/zlib.h>
+#include <zlib.h>
 
 void MainFrame::OnSocketEvent(wxSocketEvent& event) {
 	switch (event.GetSocketEvent()) {
