@@ -25,7 +25,6 @@
 					<Add option="-fomit-frame-pointer" />
 					<Add option="-fexpensive-optimizations" />
 					<Add option="-O2" />
-					<Add option="-fno-exceptions" />
 					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
