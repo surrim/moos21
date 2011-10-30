@@ -2,15 +2,15 @@
 #define BASE_H
 
 #include <vector>
-#include <wx/string.h>
-#include <wx/choice.h>
-#include <wx/cmndata.h>
-#include <wx/listbox.h>
-#include <wx/checkbox.h>
-#include <wx/textctrl.h>
-#include <wx/sizer.h>
 #include <wx/app.h>
+#include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/frame.h>
+#include <wx/fontdata.h>
+#include <wx/listbox.h>
+#include <wx/sizer.h>
+#include <wx/string.h>
+#include <wx/textctrl.h>
 
 class wxSocketEvent;
 class wxTaskBarIcon;
