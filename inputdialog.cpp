@@ -18,70 +18,72 @@ END_EVENT_TABLE()
 
 //for user choice, password, slap and ignore list
 //0=input, 1=passwdinput, 2=singlechoice+input, 3=singlechoice, 4=multichoice
-InputDialog::InputDialog(wxWindow* parent, wxFileConfig *langIni, wxFont font, wxString Title, wxString Text, int Style, wxString Default, wxArrayString ChoiceList):
-		wxDialog(parent, -1, Title),
-		MainSizer(0),
-		ButtonSizer(0),
+InputDialog::InputDialog(wxWindow* parent, wxFileConfig *langIni, const wxFont& font, const wxString& title, const wxString& text, int style, const wxString& defaultButton, const wxArrayString& choiceList):
+		wxDialog(parent, -1, title),
+		mainSizer(0),
+		buttonSizer(0),
 		ltext(0),
 		choice(0),
 		input(0),
-		okbutton(0),
-		cancelbutton(0),
+		okButton(0),
+		cancelButton(0),
 		saved(),
-		Style(Style) {
+		style(style) {
 	SetFont(font);
-	MainSizer=new wxBoxSizer(wxVERTICAL);
-	MainSizer->AddSpacer(6);
-	if (Text!=wxEmptyString) {
-		ltext=new wxStaticText(this, -1, Text);
-		MainSizer->Add(ltext, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
-		MainSizer->AddSpacer(3);
+	mainSizer=new wxBoxSizer(wxVERTICAL);
+	mainSizer->AddSpacer(6);
+	if (text!=wxEmptyString) {
+		ltext=new wxStaticText(this, -1, text);
+		mainSizer->Add(ltext, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
+		mainSizer->AddSpacer(3);
 	}
-	if (Style>=2) {
-		if (Style!=4)
-			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, wxDefaultCoord), ChoiceList);
+	if (style>=2) {
+		if (style!=4)
+			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, wxDefaultCoord), choiceList);
 		else
-			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, wxDefaultCoord), ChoiceList, wxLB_EXTENDED);
-		if (choice->FindString(Default)!=wxNOT_FOUND) choice->SetSelection(choice->FindString(Default));
-		MainSizer->Add(choice, 1, wxEXPAND|wxLEFT|wxRIGHT, 12);
-		MainSizer->AddSpacer(3);
+			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, wxDefaultCoord), choiceList, wxLB_EXTENDED);
+		if (choice->FindString(defaultButton)!=wxNOT_FOUND) {
+			choice->SetSelection(choice->FindString(defaultButton));
+		}
+		mainSizer->Add(choice, 1, wxEXPAND|wxLEFT|wxRIGHT, 12);
+		mainSizer->AddSpacer(3);
 	}
-	if (Style<=2) {
+	if (style<=2) {
 		//MainSizer->AddSpacer(-12);
 		//if (Style==2) MainSizer->AddSpacer(-5);
-		if (Style!=1)
+		if (style!=1)
 			input=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(120, -1));
 		else
 			input=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(120, -1), wxTE_PASSWORD);
-		input->SetValue(Default);
-		MainSizer->Add(input, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
-		MainSizer->AddSpacer(3);
+		input->SetValue(defaultButton);
+		mainSizer->Add(input, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
+		mainSizer->AddSpacer(3);
 	}
 	//MainSizer->AddSpacer(-12);
-	okbutton=new wxButton(this, wxID_OK, langIni->Read(wxT("translations/ok"), wxT("OK")));
-	cancelbutton=new wxButton(this, wxID_CANCEL, langIni->Read(wxT("translations/cancel"), wxT("Cancel")));
-	ButtonSizer=new wxBoxSizer(wxHORIZONTAL);
+	okButton=new wxButton(this, wxID_OK, langIni->Read(wxT("translations/ok"), wxT("OK")));
+	cancelButton=new wxButton(this, wxID_CANCEL, langIni->Read(wxT("translations/cancel"), wxT("Cancel")));
+	buttonSizer=new wxBoxSizer(wxHORIZONTAL);
 	//ButtonSizer->AddStretchSpacer();
-	ButtonSizer->Add(cancelbutton, 1, wxEXPAND|wxALL, 0);
-	ButtonSizer->AddSpacer(6);
-	ButtonSizer->Add(okbutton, 1, wxEXPAND|wxALL, 0);
-	okbutton->SetDefault();
-	MainSizer->Add(ButtonSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
-	MainSizer->AddSpacer(6);
-	if (Style<=1) {
+	buttonSizer->Add(cancelButton, 1, wxEXPAND|wxALL, 0);
+	buttonSizer->AddSpacer(6);
+	buttonSizer->Add(okButton, 1, wxEXPAND|wxALL, 0);
+	okButton->SetDefault();
+	mainSizer->Add(buttonSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
+	mainSizer->AddSpacer(6);
+	if (style<=1) {
 		input->SetFocus();
 	} else {
 		choice->SetFocus();
 	}
 
-	SetSizer(MainSizer);
+	SetSizer(mainSizer);
 	SetAutoLayout(true);
 	SetInitialSize();
 }
 
 void InputDialog::OnText(wxCommandEvent& Event) {
 	saved=input->GetValue();
-	if (Style>1) {
+	if (style>1) {
 		if (choice->FindString(saved)!=wxNOT_FOUND) {
 			choice->SetSelection(choice->FindString(saved));
 		} else {
@@ -92,11 +94,13 @@ void InputDialog::OnText(wxCommandEvent& Event) {
 
 void InputDialog::OnChoice(wxCommandEvent &event) {
 	saved=choice->GetStringSelection();
-	if (Style<=2) input->SetValue(saved);
+	if (style<=2) {
+		input->SetValue(saved);
+	}
 }
 
 void InputDialog::OnOK(wxCommandEvent &event) {
-	if (Style<=1 || Style==4 || saved!=wxEmptyString) {
+	if (style<=1 || style==4 || saved!=wxEmptyString) {
 		EndModal(wxID_OK);
 	}
 }
@@ -111,10 +115,10 @@ wxString InputDialog::GetValue() {
 
 wxArrayString InputDialog::GetSelections() {
 	wxArrayString _;
-	if (Style<=1) {
+	if (style<=1) {
 		return _;
 	}
-	for (size_t i=0;i!=choice->GetCount();++i) {
+	for (size_t i=0;i!=choice->GetCount();i++) {
 		if (choice->IsSelected(i)) {
 			_.Add(choice->GetString(i));
 		}
@@ -123,7 +127,7 @@ wxArrayString InputDialog::GetSelections() {
 }
 
 void InputDialog::SetSelections(wxArrayInt& selections) {
-	for (size_t i=0;i!=selections.GetCount();++i) {
+	for (size_t i=0;i!=selections.GetCount();i++) {
 		choice->SetSelection(selections[i]);
 	}
 }

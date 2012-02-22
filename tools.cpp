@@ -10,8 +10,11 @@ wxString Format(wxString Text, const wxString Input0, const wxString Input1, con
 }
 
 bool IsHex(const wxString Text) {
-	for (size_t i=0;i!=Text.Len();++i)
-		if (!(Text[i]>='0' && Text[i]<='9') && !(Text[i]>='a' && Text[i]<='f') && !(Text[i]>='A' && Text[i]<='F')) return false;
+	for (size_t i=0;i!=Text.Len();i++) {
+		if (!(Text[i]>='0' && Text[i]<='9') && !(Text[i]>='a' && Text[i]<='f') && !(Text[i]>='A' && Text[i]<='F')) {
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -68,7 +71,7 @@ wxString MoonCode2HTML(const wxString MoonCode) { //<0xAABBGGRR> --> RRGGBB
 		   +Number2Hex(a*((Hex2Number(MoonCode[5])<<4)|Hex2Number(MoonCode[6]))/255)+wxT("\">");
 }
 
-wxString Base64Encode(const wxString &data, const bool encrypt) {
+wxString Base64Encode(const wxString &data, bool encrypt) {
 	std::string cvt="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
 	if (encrypt) {
 		cvt="WS4FtwfL8DTrjzJN9PY0gOohxbC71VMn3Zs6BQm5pd2aHyRe+kIUEvqK-iGlcXAu";
@@ -76,7 +79,7 @@ wxString Base64Encode(const wxString &data, const bool encrypt) {
 	wxChar c;
 	int i, len=data.length();
 	std::string ret;
-	for (i=0;i<len;++i) {
+	for (i=0;i<len;i++) {
 		c=((char)data[i]>>2)&0x3f;
 		ret+=cvt[(int)c];
 		c=((char)data[i]<<4)&0x3f;
@@ -100,7 +103,7 @@ wxString Base64Encode(const wxString &data, const bool encrypt) {
 	return ret;
 }
 
-wxString Base64Decode(const wxString &data, const bool encrypt) {
+wxString Base64Decode(const wxString &data, bool encrypt) {
 	std::string cvt="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
 	if (encrypt) {
 		cvt="WS4FtwfL8DTrjzJN9PY0gOohxbC71VMn3Zs6BQm5pd2aHyRe+kIUEvqK-iGlcXAu";
@@ -108,7 +111,7 @@ wxString Base64Decode(const wxString &data, const bool encrypt) {
 	wxChar c, c1;
 	int i, len=data.length();
 	std::string ret;
-	for (i=0;i<len;++i) {
+	for (i=0;i<len;i++) {
 		c=(wxChar)cvt.find(data[i]);
 		i++;
 		c1=(wxChar)cvt.find(data[i]);

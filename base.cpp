@@ -338,7 +338,7 @@ void MainFrame::OnSendMessage(wxCommandEvent& WXUNUSED(event)) {
 	if (whisperCheckbox->IsChecked()) { //whisper
 		wxArrayInt selections;
 		userList->GetSelections(selections);
-		for (size_t i=0;i!=selections.GetCount();++i) {
+		for (size_t i=0;i!=selections.GetCount();i++) {
 			write(wxT("/msg \"")+userList->GetString(selections[i])+wxT("\" \"")+tmp+wxT("\""));
 		}
 	} else {
@@ -508,7 +508,7 @@ void MainFrame::RefreshAutocomplete(wxString User, bool Event) {
 		if (User[0]=='^') {
 			User=User.Mid(1);
 		}
-		for (size_t i=0;i!=seenUsers.GetCount();++i) {
+		for (size_t i=0;i!=seenUsers.GetCount();i++) {
 			if (seenUsers[i]==User) {
 				if (Event || IsIgnored(User) || User==loginName) {
 					seenUsers.RemoveAt(i);

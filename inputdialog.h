@@ -13,7 +13,7 @@ class wxFileConfig;
 
 class InputDialog: public wxDialog {
 	public:
-		InputDialog(wxWindow* parent, wxFileConfig *langIni, wxFont font, wxString Title, wxString Text=L"", int Style=0, wxString Default=L"", wxArrayString ChoiceList=wxArrayString());
+		InputDialog(wxWindow* parent, wxFileConfig *langIni, const wxFont& font, const wxString& title, const wxString& text=wxEmptyString, int style=0, const wxString& defaultButton=wxEmptyString, const wxArrayString& choiceList=wxArrayString());
 		void OnText(wxCommandEvent& Event);
 		void OnChoice(wxCommandEvent &event);
 		void OnOK(wxCommandEvent &event);
@@ -25,13 +25,15 @@ class InputDialog: public wxDialog {
 		InputDialog(const InputDialog& cc);
 		InputDialog& operator=(const InputDialog& cc);
 
-		wxBoxSizer *MainSizer, *ButtonSizer;
+		wxBoxSizer *mainSizer;
+		wxBoxSizer *buttonSizer;
 		wxStaticText *ltext;
 		wxListBox *choice;
 		wxTextCtrl *input;
-		wxButton *okbutton, *cancelbutton;
+		wxButton *okButton;
+		wxButton *cancelButton;
 		wxString saved;
-		int Style;
+		int style;
 	DECLARE_EVENT_TABLE()
 };
 

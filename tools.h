@@ -14,7 +14,7 @@ long MoonCode2Long(const wxString MoonCode); //<0xAABBGGRR> --> FFBBGGRR
 wxColour MoonCode2Color(const wxString MoonCode); //<0xAABBGGRR> --> FFBBGGRR
 wxColour Long2Color(const long Long); //<0xAABBGGRR> --> FFBBGGRR
 wxString MoonCode2HTML(const wxString MoonCode); //<0xAABBGGRR> --> RRGGBB
-wxString Base64Encode(const wxString &data, const bool encrypt=false);
-wxString Base64Decode(const wxString &data, const bool encrypt=false);
+wxString Base64Encode(const wxString &data, bool encrypt=false);
+wxString Base64Decode(const wxString &data, bool encrypt=false);
 
 #endif

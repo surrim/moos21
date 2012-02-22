@@ -21,7 +21,7 @@ void MainFrame::OnWhoisUser(wxCommandEvent &event) {
 		}
 		return;
 	}
-	for (size_t i=0;i!=selections.GetCount();++i) {
+	for (size_t i=0;i!=selections.GetCount();i++) {
 		write(wxT("/whois \"")+userList->GetString(selections[i])+wxT("\""));
 	}
 }
@@ -35,7 +35,7 @@ void MainFrame::OnSlapUser(wxCommandEvent &event) {
 
 	if (!userList->GetSelections(selections)) { //nobody selected
 		wxArrayString tmp3;
-		for (size_t i=0;i!=userList->GetCount();++i) {
+		for (size_t i=0;i!=userList->GetCount();i++) {
 			tmp3.Add(userList->GetString(i));
 		}
 		InputDialog *tmp=new InputDialog(this, langIni, font.GetChosenFont(),
@@ -46,7 +46,7 @@ void MainFrame::OnSlapUser(wxCommandEvent &event) {
 		}
 		users.Add(tmp->GetValue());
 	} else {
-		for (size_t i=0;i!=selections.GetCount();++i) {
+		for (size_t i=0;i!=selections.GetCount();i++) {
 			users.Add(userList->GetString(selections[i]));
 		}
 	}
@@ -58,7 +58,7 @@ void MainFrame::OnSlapUser(wxCommandEvent &event) {
 	wxString tmp2=tmp->GetValue();
 	tmp2.Replace(wxT("%"), wxT("%25"));
 	tmp2.Replace(wxT("\""), wxT("%22"));
-	for (size_t i=0;i!=users.GetCount();++i) {
+	for (size_t i=0;i!=users.GetCount();i++) {
 		write(wxT("/send \"<0xFF0000FF>slaps <0xFF2153E8>")+users[i]+wxT("<0xFF0000FF> with ")+tmp2+wxT("\""));
 	}
 	chatInput->SetFocus();
@@ -107,7 +107,7 @@ void MainFrame::OnIgnoreList(wxCommandEvent & WXUNUSED(event)) {
 													wxT("Please select all users you want to remove from your Ignore List")), 4, wxEmptyString, tmp);
 	tmp3->SetSelections(tmp4);
 	if (tmp3->ShowModal()==wxID_OK) {
-		for (size_t i=0;i!=tmp3->GetSelections().GetCount();++i) {
+		for (size_t i=0;i!=tmp3->GetSelections().GetCount();i++) {
 			UnignoreUser(tmp3->GetSelections()[i]);
 		}
 		chatInput->SetFocus();

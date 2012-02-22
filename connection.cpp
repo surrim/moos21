@@ -58,8 +58,12 @@ void MainFrame::OnIncomingData() {
 		socket->Read(inputbuffer, 1024);
 		inputbufferlen=socket->LastCount();
 		char *tmp=new char[bufferlen+inputbufferlen];
-		for (i=0;i!=bufferlen;++i) tmp[i]=buffer[i];
-		for (i=0;i!=inputbufferlen;++i) tmp[bufferlen+i]=inputbuffer[i];
+		for (i=0;i!=bufferlen;i++) {
+			tmp[i]=buffer[i];
+		}
+		for (i=0;i!=inputbufferlen;i++) {
+			tmp[bufferlen+i]=inputbuffer[i];
+		}
 		delete[] buffer;
 		buffer=tmp;
 		bufferlen+=inputbufferlen;
@@ -68,7 +72,7 @@ void MainFrame::OnIncomingData() {
 	a:
 	if (buffer[0]=='/' || buffer[0]=='$') {
 		std::string command="";
-		for (i=0;i!=bufferlen;++i) {
+		for (i=0;i!=bufferlen;i++) {
 			if (!buffer[i]) {
 				parseProcessCommand(wxConvLibc.cMB2WC(command.c_str()));
 				char *tmp=new char[bufferlen-(i+1)];
@@ -96,7 +100,7 @@ void MainFrame::OnIncomingData() {
 			if (contentlen>packetlen) {
 				contentlen=packetlen-8;
 			}
-			for (i=0;i!=contentlen;++i) {
+			for (i=0;i!=contentlen;i++) {
 				content+=cbuffer[i+8];
 			}
 			if (packettype==0) { //Success
@@ -107,7 +111,7 @@ void MainFrame::OnIncomingData() {
 					std::string identifier;
 					std::string welcomemsg;
 
-					for (i=0;i!=stringlen;++i) {
+					for (i=0;i!=stringlen;i++) {
 						identifier+=cbuffer[i+12];
 					}
 					stringlen=*((unsigned int*)(cbuffer+12+identifier.size()));
@@ -125,7 +129,7 @@ void MainFrame::OnIncomingData() {
 						version tmp;
 						tmp.id=cbuffer[vdx];
 						versionlen=*((unsigned int*)(cbuffer+vdx+1));
-						for (unsigned int idv=0;idv!=versionlen;++idv) {
+						for (unsigned int idv=0;idv!=versionlen;idv++) {
 							tmp.name+=cbuffer[vdx+5+idv];
 						}
 						gameVersions.push_back(tmp);
@@ -183,7 +187,9 @@ void MainFrame::OnIncomingData() {
 			return;
 		}
 		char *tmp=new char[bufferlen-packetlen];
-		for (i=packetlen;i!=bufferlen;++i) tmp[i-packetlen]=buffer[i];
+		for (i=packetlen;i!=bufferlen;i++) {
+			tmp[i-packetlen]=buffer[i];
+		}
 		bufferlen-=packetlen;
 		delete[] buffer;
 		buffer=tmp;
@@ -209,7 +215,9 @@ void MainFrame::parseProcessCommand(const wxString& strData) {
 		}
 		parsed.Add(strData.Mid(start, i-start));
 	}
-	while (strData[i]==' ' && i!=strData.Len()) i++;
+	while (strData[i]==' ' && i!=strData.Len()) {
+		i++;
+	}
 	if (i!=strData.Len()) {
 		goto a;
 	}
