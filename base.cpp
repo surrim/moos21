@@ -14,9 +14,11 @@
 
 IMPLEMENT_APP(MoosApp)
 
+const wxString MoosApp::CONFIG_FILE(wxT("moos.ini"));
+
 bool MoosApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
-	MainFrame *win=new MainFrame(wxT("moos2.1"), wxDefaultPosition, wxSize(720, 480));
+	MainFrame *win=new MainFrame(CONFIG_FILE, wxDefaultPosition, wxSize(720, 480));
 	win->Show();
 	SetTopWindow(win);
 	return true;
@@ -30,7 +32,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_LISTBOX_DCLICK(wxID_ANY, MainFrame::OnWhoisUser)
 	EVT_TEXT_ENTER(wxID_ANY, MainFrame::OnSendMessage)
 	EVT_TEXT(wxID_ANY, MainFrame::OnText)
-	//Socket
+	//socket
 	EVT_SOCKET(ID_SOCKET, MainFrame::OnSocketEvent)
 	//moos Menu
 	EVT_MENU(ID_MAINWIN_LOGIN_AS, MainFrame::OnLoginAs)
@@ -61,69 +63,69 @@ END_EVENT_TABLE()
 
 MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &size):
 		wxFrame(0, -1, title, pos, size),
-		MainSizer(0),
-		ListSizer(0),
-		ChatSizer(0),
-		InputSizer(0),
-		ChatHistory(),
-		LastInput(),
-		ChatBuffer(0),
-		SeenUsers(0),
-		UserList(0),
-		IgnoredUserList(0),
-		Font(),
-		ChannelSwitcher(0),
-		ChatView(0),
-		ChatInput(0),
-		WhisperCheckbox(0),
-		MoosMenu(0),
-		UserMenu(0),
-		ViewMenu(0),
-		SettingsMenu(0),
-		HelpMenu(0),
-		MoosIcon(0),
-		MenuBar(0),
-		MoosIni(0),
-		LangIni(0),
-		Socket(0),
-		DisableOnText(false),
-		LoginName(),
-		LoginPassword(),
-		GameVersion(0) {
+		mainSizer(0),
+		listSizer(0),
+		chatSizer(0),
+		inputSizer(0),
+		chatHistory(),
+		lastInput(),
+		chatBuffer(0),
+		seenUsers(0),
+		userList(0),
+		ignoredUserList(0),
+		font(),
+		channelSwitcher(0),
+		chatView(0),
+		chatInput(0),
+		whisperCheckbox(0),
+		moosMenu(0),
+		userMenu(0),
+		viewMenu(0),
+		settingsMenu(0),
+		helpMenu(0),
+		moosIcon(0),
+		menuBar(0),
+		moosIni(0),
+		langIni(0),
+		socket(0),
+		disableOnText(false),
+		loginName(),
+		loginPassword(),
+		gameVersions(0) {
 	bool firstrun=false;
-	if (!wxFile::Exists(wxT("moos.ini"))) {
-		wxFile(wxT("moos.ini"), wxFile::write);
+	if (!wxFile::Exists(MoosApp::CONFIG_FILE)) {
+		wxFile(MoosApp::CONFIG_FILE, wxFile::write);
 		firstrun=true;
 	}
-	wxFileInputStream moos(wxT("moos.ini"));
-	if (moos.CanRead()) MoosIni=LangIni=new wxFileConfig(moos, wxConvUTF8);
-	if (MoosIni->Exists(wxT("languagefile"))) {
-		if (wxFile::Exists(MoosIni->Read(wxT("languagefile")))) {
-			wxFileInputStream lang(MoosIni->Read(wxT("languagefile"), wxEmptyString));
+	wxFileInputStream moos(MoosApp::CONFIG_FILE);
+	if (moos.CanRead()) moosIni=langIni=new wxFileConfig(moos, wxConvUTF8);
+	if (moosIni->Exists(wxT("languagefile"))) {
+		if (wxFile::Exists(moosIni->Read(wxT("languagefile")))) {
+			wxFileInputStream lang(moosIni->Read(wxT("languagefile"), wxEmptyString));
 			if (lang.CanRead()) {
-				LangIni=new wxFileConfig(lang, wxConvUTF8);
+				langIni=new wxFileConfig(lang, wxConvUTF8);
 			}
 		}
 	}
 
-	int x=MoosIni->Read(wxT("layout/x"), wxDefaultCoord);
+	int x=moosIni->Read(wxT("layout/x"), wxDefaultCoord);
 	if ((x<0 && x!=wxDefaultCoord) || x>wxGetDisplaySize().GetWidth()) {
 		x=0;
 	}
-	int y=MoosIni->Read(wxT("layout/y"), wxDefaultCoord);
+	int y=moosIni->Read(wxT("layout/y"), wxDefaultCoord);
 	if ((y<0 && y!=wxDefaultCoord) || y>wxGetDisplaySize().GetHeight()) {
 		y=0;
 	}
-	int width=MoosIni->Read(wxT("layout/width"), 720);
+	int width=moosIni->Read(wxT("layout/width"), 720);
 	if (x+width>wxGetDisplaySize().GetWidth()) {
 		width=720;
 	}
-	int height=MoosIni->Read(wxT("layout/height"), 480);
+	int height=moosIni->Read(wxT("layout/height"), 480);
 	if (y+height>wxGetDisplaySize().GetHeight()) {
 		height=480;
 	}
 	SetSize(x, y, width, height);
-	if (MoosIni->Read(wxT("layout/maximized"), 0L)) {
+	if (moosIni->Read(wxT("layout/maximized"), 0L)) {
 		Maximize();
 	}
 
@@ -133,183 +135,187 @@ MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &si
 	SetIcon(wxIcon(wxT("icons/moos.png"), wxBITMAP_TYPE_PNG));
 	#endif
 	CreateStatusBar();
-	SetStatusText(LangIni->Read(wxT("translations/statusbar/notconnected"), wxT("Not connected")));
+	SetStatusText(langIni->Read(wxT("translations/statusbar/notconnected"), wxT("Not connected")));
 	wxFont tmp=wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-	if (MoosIni->Exists(wxT("layout/fontface"))) tmp.SetFaceName(MoosIni->Read(wxT("layout/fontface")));
-	if (MoosIni->Exists(wxT("layout/fontsize"))) {
+	if (moosIni->Exists(wxT("layout/fontface"))) tmp.SetFaceName(moosIni->Read(wxT("layout/fontface")));
+	if (moosIni->Exists(wxT("layout/fontsize"))) {
 		long tmp2;
-		MoosIni->Read(wxT("layout/fontsize"), &tmp2);
+		moosIni->Read(wxT("layout/fontsize"), &tmp2);
 		tmp.SetPointSize(tmp2);
 	}
-	Font.SetInitialFont(tmp);
-	Font.SetChosenFont(tmp);
-	Font.EnableEffects(false);
+	font.SetInitialFont(tmp);
+	font.SetChosenFont(tmp);
+	font.EnableEffects(false);
 	SetBackgroundColour(wxColour(212, 208, 200));
-	ChatHistory=wxT("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"><html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-16LE\"><title>moos2.1</title><style type=\"text/css\">body{background-color:#1F3038; color:#8C9FBB}pre{font-family:\"ms sans serif\", sans-serif;}</style></head><body><pre>");
+	chatHistory=wxT("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"><html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-16LE\"><title>moos2.1</title><style type=\"text/css\">body{background-color:#1F3038; color:#8C9FBB}pre{font-family:\"ms sans serif\", sans-serif;}</style></head><body><pre>");
 
-	MoosMenu=new wxMenu;
-	MoosMenu->Append(ID_MAINWIN_LOGIN_AS, LangIni->Read(wxT("translations/menus/moos/loginas"), wxT("Login as...")));
-	MoosMenu->Append(ID_MAINWIN_LOGOUT, LangIni->Read(wxT("translations/menus/moos/logout"), wxT("Logout")));
-	MoosMenu->AppendSeparator();
-	MoosMenu->Append(ID_MAINWIN_EXIT, LangIni->Read(wxT("translations/menus/moos/exit"), wxT("Exit")));
+	moosMenu=new wxMenu;
+	moosMenu->Append(ID_MAINWIN_LOGIN_AS, langIni->Read(wxT("translations/menus/moos/loginas"), wxT("Login as...")));
+	moosMenu->Append(ID_MAINWIN_LOGOUT, langIni->Read(wxT("translations/menus/moos/logout"), wxT("Logout")));
+	moosMenu->AppendSeparator();
+	moosMenu->Append(ID_MAINWIN_EXIT, langIni->Read(wxT("translations/menus/moos/exit"), wxT("Exit")));
 
-	UserMenu=new wxMenu;
-	UserMenu->Append(ID_MAINWIN_WHOIS_USER, LangIni->Read(wxT("translations/menus/user/profile"), wxT("Userinformation...")));
-	UserMenu->Append(ID_MAINWIN_SLAP_USER, LangIni->Read(wxT("translations/menus/user/slap"), wxT("Slap...")));
-	UserMenu->Append(ID_MAINWIN_IGNORE_USER, LangIni->Read(wxT("translations/menus/user/ignore"), wxT("Ignore")));
-	UserMenu->AppendSeparator();
-	UserMenu->Append(ID_MAINWIN_IGNORELIST, LangIni->Read(wxT("translations/menus/user/ignorelist"), wxT("Ignorelist...")));
+	userMenu=new wxMenu;
+	userMenu->Append(ID_MAINWIN_WHOIS_USER, langIni->Read(wxT("translations/menus/user/profile"), wxT("Userinformation...")));
+	userMenu->Append(ID_MAINWIN_SLAP_USER, langIni->Read(wxT("translations/menus/user/slap"), wxT("Slap...")));
+	userMenu->Append(ID_MAINWIN_IGNORE_USER, langIni->Read(wxT("translations/menus/user/ignore"), wxT("Ignore")));
+	userMenu->AppendSeparator();
+	userMenu->Append(ID_MAINWIN_IGNORELIST, langIni->Read(wxT("translations/menus/user/ignorelist"), wxT("Ignorelist...")));
 
-	ViewMenu=new wxMenu;
-	ViewMenu->Append(ID_MAINWIN_SAVE_CHAT, LangIni->Read(wxT("translations/menus/view/savechathistory"), wxT("Save Chat...")));
-	ViewMenu->AppendCheckItem(ID_MAINWIN_FREEZE_CHAT, LangIni->Read(wxT("translations/menus/view/freezechathistory"), wxT("Freeze Chat")));
-	ViewMenu->Append(ID_MAINWIN_DELETE_CHAT, LangIni->Read(wxT("translations/menus/view/deletechathistory"), wxT("Delete Chat")));
-	ViewMenu->AppendSeparator();
-	ViewMenu->Append(ID_MAINWIN_COLORSELECT, LangIni->Read(wxT("translations/menus/view/selectcolor"), wxT("Select Color...")));
-	ViewMenu->Append(ID_MAINWIN_MANUAL_COLORCODE, LangIni->Read(wxT("translations/menus/view/manualcolorcode"), wxT("Manual Color...")));
+	viewMenu=new wxMenu;
+	viewMenu->Append(ID_MAINWIN_SAVE_CHAT, langIni->Read(wxT("translations/menus/view/savechathistory"), wxT("Save Chat...")));
+	viewMenu->AppendCheckItem(ID_MAINWIN_FREEZE_CHAT, langIni->Read(wxT("translations/menus/view/freezechathistory"), wxT("Freeze Chat")));
+	viewMenu->Append(ID_MAINWIN_DELETE_CHAT, langIni->Read(wxT("translations/menus/view/deletechathistory"), wxT("Delete Chat")));
+	viewMenu->AppendSeparator();
+	viewMenu->Append(ID_MAINWIN_COLORSELECT, langIni->Read(wxT("translations/menus/view/selectcolor"), wxT("Select Color...")));
+	viewMenu->Append(ID_MAINWIN_MANUAL_COLORCODE, langIni->Read(wxT("translations/menus/view/manualcolorcode"), wxT("Manual Color...")));
 
-	SettingsMenu=new wxMenu;
-	SettingsMenu->AppendCheckItem(ID_MAINWIN_AUTOLOGIN_ACCOUNT, LangIni->Read(wxT("translations/menus/settings/autologinaccount"), wxT("Activate AutoLogin for this Account")));
-	SettingsMenu->AppendCheckItem(ID_MAINWIN_SOUND_ON_BEEP, LangIni->Read(wxT("translations/menus/settings/soundonbeep"), wxT("Play sound on beep")));
-	SettingsMenu->Check(ID_MAINWIN_SOUND_ON_BEEP, MoosIni->Read(wxT("enablebeep"), 0L));
-	SettingsMenu->AppendCheckItem(ID_MAINWIN_DISABLE_SLAPS, LangIni->Read(wxT("translations/menus/settings/disableslaps"), wxT("Disable Slaps")));
-	SettingsMenu->Check(ID_MAINWIN_DISABLE_SLAPS, MoosIni->Read(wxT("disableslaps"), 0L));
-	SettingsMenu->AppendSeparator();
-	SettingsMenu->Append(ID_MAINWIN_CHANGE_FONT, LangIni->Read(wxT("translations/menus/settings/changefont"), wxT("Change Font...")));
-	SettingsMenu->Append(ID_MAINWIN_SELECT_LANGUAGE, LangIni->Read(wxT("translations/menus/settings/selectlanguage"), wxT("Select Language...")));
+	settingsMenu=new wxMenu;
+	settingsMenu->AppendCheckItem(ID_MAINWIN_AUTOLOGIN_ACCOUNT, langIni->Read(wxT("translations/menus/settings/autologinaccount"), wxT("Activate AutoLogin for this Account")));
+	settingsMenu->AppendCheckItem(ID_MAINWIN_SOUND_ON_BEEP, langIni->Read(wxT("translations/menus/settings/soundonbeep"), wxT("Play sound on beep")));
+	settingsMenu->Check(ID_MAINWIN_SOUND_ON_BEEP, moosIni->Read(wxT("enablebeep"), 0L));
+	settingsMenu->AppendCheckItem(ID_MAINWIN_DISABLE_SLAPS, langIni->Read(wxT("translations/menus/settings/disableslaps"), wxT("Disable Slaps")));
+	settingsMenu->Check(ID_MAINWIN_DISABLE_SLAPS, moosIni->Read(wxT("disableslaps"), 0L));
+	settingsMenu->AppendSeparator();
+	settingsMenu->Append(ID_MAINWIN_CHANGE_FONT, langIni->Read(wxT("translations/menus/settings/changefont"), wxT("Change font...")));
+	settingsMenu->Append(ID_MAINWIN_SELECT_LANGUAGE, langIni->Read(wxT("translations/menus/settings/selectlanguage"), wxT("Select Language...")));
 
-	HelpMenu=new wxMenu;
-	HelpMenu->Append(ID_MAINWIN_ONLINEREADME, LangIni->Read(wxT("translations/menus/help/onlinereadme"), wxT("Online Readme")));
-	HelpMenu->Append(ID_MAINWIN_MAILBUGS, LangIni->Read(wxT("translations/menus/help/mailbugs"), wxT("Mail Bugs")));
-	HelpMenu->AppendSeparator();
-	HelpMenu->Append(ID_MAINWIN_ABOUT, LangIni->Read(wxT("translations/menus/help/about"), wxT("About Moos 2.1...")));
+	helpMenu=new wxMenu;
+	helpMenu->Append(ID_MAINWIN_ONLINEREADME, langIni->Read(wxT("translations/menus/help/onlinereadme"), wxT("Online Readme")));
+	helpMenu->Append(ID_MAINWIN_MAILBUGS, langIni->Read(wxT("translations/menus/help/mailbugs"), wxT("Mail Bugs")));
+	helpMenu->AppendSeparator();
+	helpMenu->Append(ID_MAINWIN_ABOUT, langIni->Read(wxT("translations/menus/help/about"), wxT("About Moos 2.1...")));
 
-	MenuBar=new wxMenuBar;
-	MenuBar->Append(MoosMenu, LangIni->Read(wxT("translations/menus/moos"), wxT("Moos")));
-	MenuBar->Append(UserMenu, LangIni->Read(wxT("translations/menus/user"), wxT("User")));
-	MenuBar->Append(ViewMenu, LangIni->Read(wxT("translations/menus/view"), wxT("View")));
-	MenuBar->Append(SettingsMenu, LangIni->Read(wxT("translations/menus/settings"), wxT("Settings")));
-	MenuBar->Append(HelpMenu, LangIni->Read(wxT("translations/menus/help"), wxT("?")));
-	SetMenuBar(MenuBar);
+	menuBar=new wxMenuBar;
+	menuBar->Append(moosMenu, langIni->Read(wxT("translations/menus/moos"), wxT("Moos")));
+	menuBar->Append(userMenu, langIni->Read(wxT("translations/menus/user"), wxT("User")));
+	menuBar->Append(viewMenu, langIni->Read(wxT("translations/menus/view"), wxT("View")));
+	menuBar->Append(settingsMenu, langIni->Read(wxT("translations/menus/settings"), wxT("Settings")));
+	menuBar->Append(helpMenu, langIni->Read(wxT("translations/menus/help"), wxT("?")));
+	SetMenuBar(menuBar);
 
 	//Sizer
-	MainSizer=new wxBoxSizer(wxHORIZONTAL);
-	ListSizer=new wxBoxSizer(wxVERTICAL);
-	ChatSizer=new wxBoxSizer(wxVERTICAL);
-	InputSizer=new wxBoxSizer(wxHORIZONTAL);
+	mainSizer=new wxBoxSizer(wxHORIZONTAL);
+	listSizer=new wxBoxSizer(wxVERTICAL);
+	chatSizer=new wxBoxSizer(wxVERTICAL);
+	inputSizer=new wxBoxSizer(wxHORIZONTAL);
 
 	//Elemente
-	SetFont(Font.GetChosenFont());
-	ChannelSwitcher=new wxChoice(this, ID_MAINWIN_CHANNELSWITCHER, wxDefaultPosition, wxDefaultSize, 0, 0, wxSTATIC_BORDER);
-	ChannelSwitcher->SetBackgroundColour(wxColour(31, 48, 56));
-	ChannelSwitcher->SetForegroundColour(wxColour(140, 158, 180));
-	UserList=new wxListBox(this, ID_MAINWIN_USERLIST, wxDefaultPosition, wxSize(200,200), 0, 0, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT|wxSTATIC_BORDER);
-	UserList->SetBackgroundColour(wxColour(31, 48, 56));
-	UserList->SetForegroundColour(wxColour(140, 158, 180));
-	IgnoredUserList=new wxListBox(this, ID_MAINWIN_IGNOREDUSERLIST, wxDefaultPosition, wxSize(200,200), 0, 0, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT|wxSTATIC_BORDER);
-	IgnoredUserList->SetBackgroundColour(wxColour(31, 48, 56));
-	IgnoredUserList->SetForegroundColour(wxColour(140, 158, 180));
-	IgnoredUserList->Hide();
-	ChatView=new wxTextCtrl(this, ID_MAINWIN_CHATVIEW, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH|wxTE_RICH2|wxTE_MULTILINE|wxTE_READONLY|wxSTATIC_BORDER);
-	ChatView->SetBackgroundColour(wxColour(31, 48, 56));
-	ChatInput=new wxTextCtrl(this, ID_MAINWIN_CHATINPUT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxWANTS_CHARS);
-	WhisperCheckbox=new wxCheckBox(this, ID_MAINWIN_WHISPERCHECKBOX, LangIni->Read(wxT("translations/whisper"), wxT("Whisper")));
-	Socket=new wxSocketClient();
-	Socket->SetEventHandler(*this, ID_SOCKET);
-	Socket->SetNotify(wxSOCKET_INPUT_FLAG|wxSOCKET_LOST_FLAG|wxSOCKET_OUTPUT_FLAG|wxSOCKET_CONNECTION_FLAG);
-	Socket->Notify(true);
+	SetFont(font.GetChosenFont());
+	channelSwitcher=new wxChoice(this, ID_MAINWIN_CHANNELSWITCHER, wxDefaultPosition, wxDefaultSize, 0, 0, wxSTATIC_BORDER);
+	channelSwitcher->SetBackgroundColour(wxColour(31, 48, 56));
+	channelSwitcher->SetForegroundColour(wxColour(140, 158, 180));
+	userList=new wxListBox(this, ID_MAINWIN_USERLIST, wxDefaultPosition, wxSize(200,200), 0, 0, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT|wxSTATIC_BORDER);
+	userList->SetBackgroundColour(wxColour(31, 48, 56));
+	userList->SetForegroundColour(wxColour(140, 158, 180));
+	ignoredUserList=new wxListBox(this, ID_MAINWIN_IGNOREDUSERLIST, wxDefaultPosition, wxSize(200,200), 0, 0, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT|wxSTATIC_BORDER);
+	ignoredUserList->SetBackgroundColour(wxColour(31, 48, 56));
+	ignoredUserList->SetForegroundColour(wxColour(140, 158, 180));
+	ignoredUserList->Hide();
+	chatView=new wxTextCtrl(this, ID_MAINWIN_CHATVIEW, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH|wxTE_RICH2|wxTE_MULTILINE|wxTE_READONLY|wxSTATIC_BORDER);
+	chatView->SetBackgroundColour(wxColour(31, 48, 56));
+	chatInput=new wxTextCtrl(this, ID_MAINWIN_CHATINPUT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxWANTS_CHARS);
+	whisperCheckbox=new wxCheckBox(this, ID_MAINWIN_WHISPERCHECKBOX, langIni->Read(wxT("translations/whisper"), wxT("Whisper")));
+	socket=new wxSocketClient();
+	socket->SetEventHandler(*this, ID_SOCKET);
+	socket->SetNotify(wxSOCKET_INPUT_FLAG|wxSOCKET_LOST_FLAG|wxSOCKET_OUTPUT_FLAG|wxSOCKET_CONNECTION_FLAG);
+	socket->Notify(true);
 	if (firstrun) {
 		wxCommandEvent tmp3;
 		OnSelectLanguage(tmp3);
 	}
 
-	MainSizer->Add(ListSizer, 0, wxEXPAND|wxALL, 3);
-	MainSizer->Add(ChatSizer, 1, wxEXPAND|wxALL, 3);
+	mainSizer->Add(listSizer, 0, wxEXPAND|wxALL, 3);
+	mainSizer->Add(chatSizer, 1, wxEXPAND|wxALL, 3);
 
-	ListSizer->Add(ChannelSwitcher, 0, wxEXPAND|wxALL, 0);
-	ListSizer->AddSpacer(3);
-	ListSizer->Add(UserList, 1, wxEXPAND|wxALL, 0);
-	ListSizer->Add(IgnoredUserList, 1, wxEXPAND|wxALL, 0);
-	ChatSizer->Add(ChatView, 1, wxEXPAND|wxALL, 0);
-	ChatSizer->AddSpacer(1);
-	ChatSizer->Add(InputSizer, 0, wxEXPAND|wxALL, 0);
-	InputSizer->Add(ChatInput, 1, wxEXPAND|wxALL, 0);
-	InputSizer->AddSpacer(3);
-	InputSizer->Add(WhisperCheckbox, 0, wxEXPAND|wxALL, 0);
+	listSizer->Add(channelSwitcher, 0, wxEXPAND|wxALL, 0);
+	listSizer->AddSpacer(3);
+	listSizer->Add(userList, 1, wxEXPAND|wxALL, 0);
+	listSizer->Add(ignoredUserList, 1, wxEXPAND|wxALL, 0);
+	chatSizer->Add(chatView, 1, wxEXPAND|wxALL, 0);
+	chatSizer->AddSpacer(1);
+	chatSizer->Add(inputSizer, 0, wxEXPAND|wxALL, 0);
+	inputSizer->Add(chatInput, 1, wxEXPAND|wxALL, 0);
+	inputSizer->AddSpacer(3);
+	inputSizer->Add(whisperCheckbox, 0, wxEXPAND|wxALL, 0);
 
-	if (MoosIni->Exists(wxT("autologin"))) {
-		LoginAs(Base64Decode(MoosIni->Read(wxT("autologin"))),
-				Base64Decode(MoosIni->Read(wxT("accounts/")+MoosIni->Read(wxT("autologin"))+wxT("/password")), true),
-				MoosIni->Read(wxT("accounts/")+MoosIni->Read(wxT("autologin"))+wxT("/server"), wxT("netserver.earth2150.com")),
-				MoosIni->Read(wxT("accounts/")+MoosIni->Read(wxT("autologin"))+wxT("/port"), wxT("17171")));
+	if (moosIni->Exists(wxT("autologin"))) {
+		loginAs(Base64Decode(moosIni->Read(wxT("autologin"))),
+				Base64Decode(moosIni->Read(wxT("accounts/")+moosIni->Read(wxT("autologin"))+wxT("/password")), true),
+				moosIni->Read(wxT("accounts/")+moosIni->Read(wxT("autologin"))+wxT("/server"), wxT("netserver.earth2150.com")),
+				moosIni->Read(wxT("accounts/")+moosIni->Read(wxT("autologin"))+wxT("/port"), wxT("17171")));
 	}
 
-	SetSizer(MainSizer);
+	SetSizer(mainSizer);
 	SetAutoLayout(true);
-	ChatInput->SetFocus();
+	chatInput->SetFocus();
 }
 
 MainFrame::~MainFrame() {
 	wxRect rect=GetRect();
 	if (IsMaximized()) {
-		MoosIni->Write(wxT("layout/maximized"), 1);
+		moosIni->Write(wxT("layout/maximized"), 1);
 	} else {
-		MoosIni->Write(wxT("layout/maximized"), 0);
-		MoosIni->Write(wxT("layout/x"), rect.GetX());
-		MoosIni->Write(wxT("layout/y"), rect.GetY());
-		MoosIni->Write(wxT("layout/width"), rect.GetWidth());
-		MoosIni->Write(wxT("layout/height"), rect.GetHeight());
+		moosIni->Write(wxT("layout/maximized"), 0);
+		moosIni->Write(wxT("layout/x"), rect.GetX());
+		moosIni->Write(wxT("layout/y"), rect.GetY());
+		moosIni->Write(wxT("layout/width"), rect.GetWidth());
+		moosIni->Write(wxT("layout/height"), rect.GetHeight());
 	}
-	if (Socket->IsConnected()) {
-		Socket->Close();
+	if (socket->IsConnected()) {
+		socket->Close();
 	}
-	wxFileOutputStream tmp(wxT("moos.ini"));
-	MoosIni->Save(tmp, wxConvUTF8);
+	wxFileOutputStream tmp(MoosApp::CONFIG_FILE);
+	moosIni->Save(tmp, wxConvUTF8);
 }
 
 void MainFrame::OnSelectChannel(wxCommandEvent &event) {
-	Write(wxT("/join \"")+ChannelSwitcher->GetStringSelection()+wxT("\""));
-	WhisperCheckbox->SetValue(false);
-	UserList->DeselectAll();
-	ChatInput->SetFocus();
+	write(wxT("/join \"")+channelSwitcher->GetStringSelection()+wxT("\""));
+	whisperCheckbox->SetValue(false);
+	userList->DeselectAll();
+	chatInput->SetFocus();
 }
 
 void MainFrame::OnSelectUser(wxCommandEvent& event) {
 	wxArrayInt selections;
-	if (!UserList->GetSelections(selections)) WhisperCheckbox->SetValue(false);
-	ChatInput->SetFocus();
+	if (!userList->GetSelections(selections)) {
+		whisperCheckbox->SetValue(false);
+	}
+	chatInput->SetFocus();
 }
 
 void MainFrame::OnWhisperClick(wxCommandEvent& event) {
 	wxArrayInt selections;
-	if (!UserList->GetSelections(selections)) WhisperCheckbox->SetValue(false);
-	ChatInput->SetFocus();
+	if (!userList->GetSelections(selections)) {
+		whisperCheckbox->SetValue(false);
+	}
+	chatInput->SetFocus();
 }
 
 //---------- Chat --------------
 void MainFrame::OnSendMessage(wxCommandEvent& WXUNUSED(event)) {
-	if (ViewMenu->IsChecked(ID_MAINWIN_FREEZE_CHAT)) {
+	if (viewMenu->IsChecked(ID_MAINWIN_FREEZE_CHAT)) {
 		return;
 	}
-	if (!ChatInput->GetValue().Len() || !Socket->IsConnected()) {
-		ChatInput->Clear();
+	if (!chatInput->GetValue().Len() || !socket->IsConnected()) {
+		chatInput->Clear();
 		return;
 	}
-	wxString tmp=ChatInput->GetLineText(0);
+	wxString tmp=chatInput->GetLineText(0);
 	tmp.Replace(wxT("\n"), wxEmptyString);
 	tmp.Replace(wxT("\t"), wxEmptyString);
 	if (tmp[0]=='/') {
 		if (tmp.Mid(1, 5)==wxT("slap ")) { // /ignore "xxx"
-			if (SettingsMenu->IsChecked(ID_MAINWIN_DISABLE_SLAPS)) {
+			if (settingsMenu->IsChecked(ID_MAINWIN_DISABLE_SLAPS)) {
 				return;
 			}
-			InputDialog tmp2(this, LangIni, Font.GetChosenFont(), LangIni->Read(wxT("translations/menus/user/slap"), wxT("Slap...")),
-							 LangIni->Read(wxT("translations/dialogtext/enterslap"), wxT("Please enter slap text")));
+			InputDialog tmp2(this, langIni, font.GetChosenFont(), langIni->Read(wxT("translations/menus/user/slap"), wxT("Slap...")),
+							 langIni->Read(wxT("translations/dialogtext/enterslap"), wxT("Please enter slap text")));
 			if (tmp2.ShowModal()==wxID_OK && tmp2.GetValue()!=wxEmptyString) {
 				if (tmp[6]=='\"' && tmp[tmp.Len()-1]=='\"') {
-					Write(wxT("/send \"<0xFF0000FF>slaps <0xFF2153E8>")+tmp.Mid(7, tmp.Len()-8)+wxT("<0xFF0000FF> with ")+tmp2.GetValue()+wxT("\""));
+					write(wxT("/send \"<0xFF0000FF>slaps <0xFF2153E8>")+tmp.Mid(7, tmp.Len()-8)+wxT("<0xFF0000FF> with ")+tmp2.GetValue()+wxT("\""));
 				}				  else {
-					Write(wxT("/send \"<0xFF0000FF>slaps <0xFF2153E8>")+tmp.Mid(6, tmp.Len()-6)+wxT("<0xFF0000FF> with ")+tmp2.GetValue()+wxT("\""));
+					write(wxT("/send \"<0xFF0000FF>slaps <0xFF2153E8>")+tmp.Mid(6, tmp.Len()-6)+wxT("<0xFF0000FF> with ")+tmp2.GetValue()+wxT("\""));
 				}
 			}
 		} else if (tmp.Mid(1, 7)==wxT("ignore ")) { // /ignore "xxx"
@@ -323,29 +329,31 @@ void MainFrame::OnSendMessage(wxCommandEvent& WXUNUSED(event)) {
 			else
 				UnignoreUser(tmp.Mid(10));
 		} else {
-			Write(tmp);
+			write(tmp);
 		}
-		return ChatInput->Clear();
+		return chatInput->Clear();
 	}
 	tmp.Replace(wxT("%"), wxT("%25"));
 	tmp.Replace(wxT("\""), wxT("%22"));
-	if (WhisperCheckbox->IsChecked()) { //whisper
+	if (whisperCheckbox->IsChecked()) { //whisper
 		wxArrayInt selections;
-		UserList->GetSelections(selections);
-		for (size_t i=0;i!=selections.GetCount();++i) Write(wxT("/msg \"")+UserList->GetString(selections[i])+wxT("\" \"")+tmp+wxT("\""));
+		userList->GetSelections(selections);
+		for (size_t i=0;i!=selections.GetCount();++i) {
+			write(wxT("/msg \"")+userList->GetString(selections[i])+wxT("\" \"")+tmp+wxT("\""));
+		}
 	} else {
-		Write(wxT("/send \"")+Long2MoonCode(MoosIni->Read(wxT("accounts/")+Base64Encode(LoginName)+wxT("/chatcolor"),
-											LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)))+tmp+wxT("\""));
+		write(wxT("/send \"")+Long2MoonCode(moosIni->Read(wxT("accounts/")+Base64Encode(loginName)+wxT("/chatcolor"),
+											langIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)))+tmp+wxT("\""));
 	}
-	ChatInput->Clear();
+	chatInput->Clear();
 }
 
 void MainFrame::OnText(wxCommandEvent& event) {
-	if (ChatInput->GetInsertionPoint()==ChatInput->GetLastPosition() && !ChatInput->GetStringSelection().Len()
-			&& !DisableOnText && LastInput.Len()<ChatInput->GetValue().Len()) {
-		LastInput=ChatInput->GetValue();
-		int oldpos=ChatInput->GetInsertionPoint();
-		DisableOnText=1;
+	if (chatInput->GetInsertionPoint()==chatInput->GetLastPosition() && !chatInput->GetStringSelection().Len()
+			&& !disableOnText && lastInput.Len()<chatInput->GetValue().Len()) {
+		lastInput=chatInput->GetValue();
+		int oldpos=chatInput->GetInsertionPoint();
+		disableOnText=true;
 		wxArrayString Cmd;
 		Cmd.Add(wxT("/msg "));
 		Cmd.Add(wxT("/beep "));
@@ -353,40 +361,58 @@ void MainFrame::OnText(wxCommandEvent& event) {
 		Cmd.Add(wxT("/slap "));
 		Cmd.Add(wxT("/ignore "));
 		Cmd.Add(wxT("/unignore "));
-		for (size_t i=0;i!=Cmd.GetCount();++i) {
-			if (ChatInput->GetValue().Mid(0, Cmd[i].Len()).Lower()==Cmd[i]) {
-				if (ChatInput->GetValue()[Cmd[i].Len()]=='\"') {
+		for (size_t i=0;i!=Cmd.GetCount();i++) {
+			if (chatInput->GetValue().Mid(0, Cmd[i].Len()).Lower()==Cmd[i]) {
+				if (chatInput->GetValue()[Cmd[i].Len()]=='\"') {
 					if (Cmd[i]!=wxT("/msg ")) {
-						ChatInput->SetValue(ChatInput->GetValue().Mid(0, Cmd[i].Len()+1)+AutoComplete(ChatInput->GetValue().Mid(Cmd[i].Len()+1), wxT("\"")));
+						chatInput->SetValue(chatInput->GetValue().Mid(0, Cmd[i].Len()+1)+AutoComplete(chatInput->GetValue().Mid(Cmd[i].Len()+1), wxT("\"")));
 					} else {
-						ChatInput->SetValue(ChatInput->GetValue().Mid(0, Cmd[i].Len()+1)+AutoComplete(ChatInput->GetValue().Mid(Cmd[i].Len()+1), wxT("\" ")));
+						chatInput->SetValue(chatInput->GetValue().Mid(0, Cmd[i].Len()+1)+AutoComplete(chatInput->GetValue().Mid(Cmd[i].Len()+1), wxT("\" ")));
 					}
-					ChatInput->SetSelection(oldpos, ChatInput->GetLastPosition());
+					chatInput->SetSelection(oldpos, chatInput->GetLastPosition());
 				} else {
-					if (Cmd[i]!=wxT("/msg "))
-						ChatInput->SetValue(ChatInput->GetValue().Mid(0, Cmd[i].Len())+wxT("\"")+AutoComplete(ChatInput->GetValue().Mid(Cmd[i].Len()), wxT("\"")));
-					else
-						ChatInput->SetValue(ChatInput->GetValue().Mid(0, Cmd[i].Len())+wxT("\"")+AutoComplete(ChatInput->GetValue().Mid(Cmd[i].Len()), wxT("\" ")));
-					ChatInput->SetSelection(oldpos+1, ChatInput->GetLastPosition());
+					if (Cmd[i]!=wxT("/msg ")) {
+						chatInput->SetValue(chatInput->GetValue().Mid(0, Cmd[i].Len())+wxT("\"")+AutoComplete(chatInput->GetValue().Mid(Cmd[i].Len()), wxT("\"")));
+					} else {
+						chatInput->SetValue(chatInput->GetValue().Mid(0, Cmd[i].Len())+wxT("\"")+AutoComplete(chatInput->GetValue().Mid(Cmd[i].Len()), wxT("\" ")));
+					}
+					chatInput->SetSelection(oldpos+1, chatInput->GetLastPosition());
 				}
 			}
 		}
 	} else {
-		if (!DisableOnText) LastInput=ChatInput->GetValue();
+		if (!disableOnText) {
+			lastInput=chatInput->GetValue();
+		}
 	}
-	DisableOnText=0;
+	disableOnText=false;
 }
 
 wxString MainFrame::AutoComplete(wxString Beginning, wxString Ending, int Ignored) {
 	if (Beginning==wxEmptyString) {
 		wxArrayInt selections;
-		if (UserList->GetSelections(selections)==1) return UserList->GetString(selections[0])+Ending;
+		if (userList->GetSelections(selections)==1) {
+			return userList->GetString(selections[0])+Ending;
+		}
 	}
-	for (int i=SeenUsers.GetCount()-1;i!=-1;--i) {
-		if (SeenUsers[i].Mid(0, Beginning.Len()).Lower()==Beginning.Lower() && ((!Ignored && !IsIgnored(SeenUsers[i])) || Ignored==1
-				|| (Ignored==2 && IsIgnored(SeenUsers[i])))) return SeenUsers[i]+Ending;
+	for (int i=seenUsers.GetCount()-1;i!=-1;i--) {
+		if (
+			seenUsers[i].Mid(0, Beginning.Len()).Lower()==Beginning.Lower()
+			&&
+			(
+				(!Ignored && !IsIgnored(seenUsers[i]))
+				||
+				Ignored==1
+				||
+				(Ignored==2 && IsIgnored(seenUsers[i]))
+			)
+		) {
+			return seenUsers[i]+Ending;
+		}
 	}
-	if (Beginning.Find(wxT("\""))!=-1) return Beginning;
+	if (Beginning.Find(wxT("\""))!=-1) {
+		return Beginning;
+	}
 	return Beginning+Ending;
 }
 
@@ -394,82 +420,86 @@ wxString MainFrame::AutoComplete(wxString Beginning, wxString Ending, int Ignore
 void MainFrame::Message(wxString Text, const wxString Input0, const wxString Input1, const wxString Input2, const wxString Input3) {
 	if (Text==wxEmptyString) return;
 	Text=Format(Text, Input0, Input1, Input2, Input3);
-	if (ViewMenu->IsChecked(ID_MAINWIN_FREEZE_CHAT)) {
-		ChatBuffer.Add(Text);
+	if (viewMenu->IsChecked(ID_MAINWIN_FREEZE_CHAT)) {
+		chatBuffer.Add(Text);
 		return;
 	}
-	Text.Replace(wxT("<*>"), Long2MoonCode(LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)));
+	Text.Replace(wxT("<*>"), Long2MoonCode(langIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)));
 	Text.Replace(wxT("\\n"), wxEmptyString);
 	Text.Replace(wxT("%22"), wxT("\""));
 	Text.Replace(wxT("%25"), wxT("%"));
 
 	wxString tmp;
-	ChatView->SetDefaultStyle(wxTextAttr(Long2Color(LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)), wxColour(31, 48, 56), Font.GetChosenFont()));
+	chatView->SetDefaultStyle(wxTextAttr(Long2Color(langIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)), wxColour(31, 48, 56), font.GetChosenFont()));
 	size_t i=0, opentag=0;
 	while (i!=Text.Len()) {
 		if (Text[i]!='<') {
 			tmp+=Text[i++];
 		} else { //<...
 			if (Text[i+1]=='0' && (Text[i+2]=='x' || Text[i+2]=='X') && IsHex(Text.Mid(i+3, 8)) && Text[i+11]=='>') { //<0xAABBGGRR>
-				ChatView->AppendText(tmp);
-				ChatView->SetDefaultStyle(wxTextAttr(MoonCode2Color(Text.Mid(i, 12))));
-				ChatHistory+=tmp;
-				if (opentag || MoonCode2Long(Text.Mid(i, 12))!=LangIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)) {
+				chatView->AppendText(tmp);
+				chatView->SetDefaultStyle(wxTextAttr(MoonCode2Color(Text.Mid(i, 12))));
+				chatHistory+=tmp;
+				if (opentag || MoonCode2Long(Text.Mid(i, 12))!=langIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)) {
 					if (opentag) {
-						ChatHistory+=wxT("</span>");
+						chatHistory+=wxT("</span>");
 					}
-					ChatHistory+=MoonCode2HTML(Text.Mid(i, 12));
+					chatHistory+=MoonCode2HTML(Text.Mid(i, 12));
 					opentag=1;
 				}
 				tmp=wxEmptyString;
 				i+=12;
 			} else if (Text[i+1]=='<' && Text[i+2]=='>') { //<<>
-				ChatHistory+=wxT("&lt;");
+				chatHistory+=wxT("&lt;");
 				tmp+=wxT("<");
 				i+=3;
 			} else {
-				while (i!=Text.Len() && Text[i]!='>') i++;
-				if (Text[i]=='>') i++;
+				while (i!=Text.Len() && Text[i]!='>') {
+					i++;
+				}
+				if (Text[i]=='>') {
+					i++;
+				}
 			}
 		}
 	}
-	ChatView->AppendText(tmp+wxT("\n"));
+	chatView->AppendText(tmp+wxT("\n"));
 	#ifdef WIN32
 		int h;
-		ChatView->GetClientSize(0, &h);
-		ChatView->ShowPosition(ChatView->XYToPosition(0, ChatView->GetNumberOfLines()-(h/ChatView->GetCharHeight())));
+		chatView->GetClientSize(0, &h);
+		chatView->ShowPosition(chatView->XYToPosition(0, chatView->GetNumberOfLines()-(h/chatView->GetCharHeight())));
 	#endif
 	tmp.Replace(wxT("&"), wxT("&amp;"));
-	ChatHistory+=tmp;
+	chatHistory+=tmp;
 	if (opentag) {
-		ChatHistory+=wxT("</span>");
+		chatHistory+=wxT("</span>");
 	}
-	ChatHistory+=wxT("\n");
-	ChatInput->SetFocus();
+	chatHistory+=wxT("\n");
+	chatInput->SetFocus();
 }
 
 //------ Channel -------
 void MainFrame::AddChannel(wxString Channel) {
-	ChannelSwitcher->Append(Channel);
+	channelSwitcher->Append(Channel);
 	if (Channel==wxT("MoonNet")) {
 		SetChannel(wxT("MoonNet"));
 	}
 }
 
 void MainFrame::SetChannel(wxString Channel) {
-	if (ChannelSwitcher->FindString(Channel)!=wxNOT_FOUND) {
-		ChannelSwitcher->SetSelection(ChannelSwitcher->FindString(Channel));
+	if (channelSwitcher->FindString(Channel)!=wxNOT_FOUND) {
+		channelSwitcher->SetSelection(channelSwitcher->FindString(Channel));
 	}
 }
 
 void MainFrame::RemoveChannel(wxString Channel) {
-	if (ChannelSwitcher->FindString(Channel)!=wxNOT_FOUND) {
-		ChannelSwitcher->Delete(ChannelSwitcher->FindString(Channel));
+	if (channelSwitcher->FindString(Channel)!=wxNOT_FOUND) {
+		channelSwitcher->Delete(channelSwitcher->FindString(Channel));
 	}
 }
 
 void MainFrame::RemoveAllChannelsAndUsers() {
-	ChannelSwitcher->Clear();
+	channelSwitcher->Clear();
 	RemoveAllUsers();
 }
 
@@ -478,16 +508,16 @@ void MainFrame::RefreshAutocomplete(wxString User, bool Event) {
 		if (User[0]=='^') {
 			User=User.Mid(1);
 		}
-		for (size_t i=0;i!=SeenUsers.GetCount();++i) {
-			if (SeenUsers[i]==User) {
-				if (Event || IsIgnored(User) || User==LoginName) {
-					SeenUsers.RemoveAt(i);
-					SeenUsers.Add(User);
+		for (size_t i=0;i!=seenUsers.GetCount();++i) {
+			if (seenUsers[i]==User) {
+				if (Event || IsIgnored(User) || User==loginName) {
+					seenUsers.RemoveAt(i);
+					seenUsers.Add(User);
 				}
 				return;
 			}
 		}
-		SeenUsers.Add(User);
+		seenUsers.Add(User);
 	}
 }
 

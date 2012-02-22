@@ -18,13 +18,16 @@ class wxFileConfig;
 class wxSocketClient;
 
 struct version {
-	version(): ID(0), Name(){}
-	int ID;
-	wxString Name;
+	version(): id(0), name(){
+	}
+	int id;
+	wxString name;
 };
 
 class MoosApp: public wxApp {
 	public:
+		static const wxString CONFIG_FILE;
+
 		virtual bool OnInit();
 };
 
@@ -39,26 +42,27 @@ class MainFrame: public wxFrame {
 		void OnWhisperClick(wxCommandEvent& event);
 		void OnSendMessage(wxCommandEvent& WXUNUSED(event));
 		void OnText(wxCommandEvent& event);
-		wxString AutoComplete(wxString Beginning, wxString Ending=L"", int Ignored=0);
-		void Message(wxString Text, wxString Input0=L"", wxString Input1=L"", wxString Input2=L"", wxString Input3=L"");
+		wxString AutoComplete(wxString Beginning, wxString Ending=wxEmptyString, int Ignored=0);
+		void Message(wxString Text, wxString Input0=wxEmptyString, wxString Input1=wxEmptyString, wxString Input2=wxEmptyString, wxString Input3=wxEmptyString);
 		void AddChannel(wxString Channel);
 		void SetChannel(wxString Channel);
 		void RemoveChannel(wxString Channel);
 		void RemoveAllChannelsAndUsers();
 		void RefreshAutocomplete(wxString User, bool Event=true);
 
-		//connection.cpp - Socket
+		//connection.cpp - socket
 		void OnSocketEvent(wxSocketEvent& event);
 		void OnConnectionLost();
 		void OnConnect();
 		void OnIncomingData();
-		void ParseProcessCommand(wxString strData);
-		wxString GetVersion(wxString ID);
-		std::string EncodeMessage(const std::string Message);
-		std::string GetInvertedLength(const unsigned int &Length);
-		std::string GenerateLoginMessage(wxString User, wxString Password);
-		void Write(wxString Data);
-		void LoginAs(wxString User, wxString Password, wxString Server=L"", wxString Port=L"");
+
+		void parseProcessCommand(const wxString& strData);
+		wxString getVersion(const wxString& id);
+		std::string encodeMessage(const std::string& message);
+		std::string getInvertedLength(unsigned int length);
+		std::string generateLoginMessage(const wxString& loginUser, const wxString& loginPassword);
+		void write(const wxString& data);
+		void loginAs(const wxString& loginName, const wxString& loginPassword, const wxString& server=wxEmptyString, const wxString& port=wxEmptyString);
 
 		//moosmenu.cpp - Moos Menu
 		void OnLoginAs(wxCommandEvent &event);
@@ -99,25 +103,35 @@ class MainFrame: public wxFrame {
 		MainFrame(const MainFrame& cc);
 		MainFrame& operator=(const MainFrame& cc);
 
-		wxBoxSizer *MainSizer;
-		wxBoxSizer *ListSizer;
-		wxBoxSizer *ChatSizer;
-		wxBoxSizer *InputSizer;
-		wxString ChatHistory, LastInput;
-		wxArrayString ChatBuffer, SeenUsers;
-		wxListBox *UserList, *IgnoredUserList;
-		wxFontData Font;
-		wxChoice *ChannelSwitcher;
-		wxTextCtrl *ChatView, *ChatInput;
-		wxCheckBox *WhisperCheckbox;
-		wxMenu *MoosMenu, *UserMenu, *ViewMenu, *SettingsMenu, *HelpMenu;
-		wxTaskBarIcon *MoosIcon;
-		wxMenuBar *MenuBar;
-		wxFileConfig *MoosIni, *LangIni;
-		wxSocketClient *Socket;
-		bool DisableOnText;
-		wxString LoginName, LoginPassword;
-		std::vector<version> GameVersion;
+		wxBoxSizer *mainSizer;
+		wxBoxSizer *listSizer;
+		wxBoxSizer *chatSizer;
+		wxBoxSizer *inputSizer;
+		wxString chatHistory;
+		wxString lastInput;
+		wxArrayString chatBuffer;
+		wxArrayString seenUsers;
+		wxListBox *userList;
+		wxListBox *ignoredUserList;
+		wxFontData font;
+		wxChoice *channelSwitcher;
+		wxTextCtrl *chatView;
+		wxTextCtrl *chatInput;
+		wxCheckBox *whisperCheckbox;
+		wxMenu *moosMenu;
+		wxMenu *userMenu;
+		wxMenu *viewMenu;
+		wxMenu *settingsMenu;
+		wxMenu *helpMenu;
+		wxTaskBarIcon *moosIcon;
+		wxMenuBar *menuBar;
+		wxFileConfig *moosIni;
+		wxFileConfig *langIni;
+		wxSocketClient *socket;
+		bool disableOnText;
+		wxString loginName;
+		wxString loginPassword;
+		std::vector<version> gameVersions;
 
 	DECLARE_EVENT_TABLE()
 };

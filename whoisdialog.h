@@ -14,7 +14,7 @@ class wxButton;
 
 class WhoisDialog: public wxDialog {
 	public:
-		WhoisDialog(wxWindow* parent, wxFileConfig *LangIni, wxArrayString WhoisData, bool IsYourself, wxSocketClient* Socket, wxFont Font);
+		WhoisDialog(wxWindow* parent, wxFileConfig *langIni, wxArrayString WhoisData, bool IsYourself, wxSocketClient* socket, wxFont font);
 
 		void OnChoice(wxCommandEvent &event);
 		void OnApply(wxCommandEvent &event);
@@ -32,7 +32,7 @@ class WhoisDialog: public wxDialog {
 		wxChoice *gender, *gamename, *statistics;
 		wxButton *applybutton, *cancelbutton;
 		wxArrayString WhoisData;
-		wxSocketClient *Socket;
+		wxSocketClient *socket;
 	DECLARE_EVENT_TABLE()
 };
 

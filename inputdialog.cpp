@@ -18,7 +18,7 @@ END_EVENT_TABLE()
 
 //for user choice, password, slap and ignore list
 //0=input, 1=passwdinput, 2=singlechoice+input, 3=singlechoice, 4=multichoice
-InputDialog::InputDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, wxString Title, wxString Text, int Style, wxString Default, wxArrayString ChoiceList):
+InputDialog::InputDialog(wxWindow* parent, wxFileConfig *langIni, wxFont font, wxString Title, wxString Text, int Style, wxString Default, wxArrayString ChoiceList):
 		wxDialog(parent, -1, Title),
 		MainSizer(0),
 		ButtonSizer(0),
@@ -29,7 +29,7 @@ InputDialog::InputDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, w
 		cancelbutton(0),
 		saved(),
 		Style(Style) {
-	SetFont(Font);
+	SetFont(font);
 	MainSizer=new wxBoxSizer(wxVERTICAL);
 	MainSizer->AddSpacer(6);
 	if (Text!=wxEmptyString) {
@@ -58,8 +58,8 @@ InputDialog::InputDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, w
 		MainSizer->AddSpacer(3);
 	}
 	//MainSizer->AddSpacer(-12);
-	okbutton=new wxButton(this, wxID_OK, LangIni->Read(wxT("translations/ok"), wxT("OK")));
-	cancelbutton=new wxButton(this, wxID_CANCEL, LangIni->Read(wxT("translations/cancel"), wxT("Cancel")));
+	okbutton=new wxButton(this, wxID_OK, langIni->Read(wxT("translations/ok"), wxT("OK")));
+	cancelbutton=new wxButton(this, wxID_CANCEL, langIni->Read(wxT("translations/cancel"), wxT("Cancel")));
 	ButtonSizer=new wxBoxSizer(wxHORIZONTAL);
 	//ButtonSizer->AddStretchSpacer();
 	ButtonSizer->Add(cancelbutton, 1, wxEXPAND|wxALL, 0);

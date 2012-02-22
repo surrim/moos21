@@ -11,17 +11,19 @@ class wxFileConfig;
 
 class InfoDialog: public wxDialog {
 	public:
-		InfoDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, wxString Title, wxString Text, int Style=0, int Default=0);
+		InfoDialog(wxWindow* parent, wxFileConfig *langIni, const wxFont& font, const wxString& title, const wxString& text, int style=0, int defaultButton=0);
 		void OnButton1(wxCommandEvent &event);
 		void OnButton2(wxCommandEvent &event);
 	private:
 		InfoDialog(const InfoDialog& cc);
 		InfoDialog& operator=(const InfoDialog& cc);
 
-		wxBoxSizer *MainSizer, *ButtonSizer;
+		wxBoxSizer *mainSizer;
+		wxBoxSizer *buttonSizer;
 		wxStaticText *ltext;
-		wxButton *button1, *button2;
-		int Style;
+		wxButton *button1;
+		wxButton *button2;
+		int style;
 	DECLARE_EVENT_TABLE()
 };
 

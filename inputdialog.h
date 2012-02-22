@@ -13,7 +13,7 @@ class wxFileConfig;
 
 class InputDialog: public wxDialog {
 	public:
-		InputDialog(wxWindow* parent, wxFileConfig *LangIni, wxFont Font, wxString Title, wxString Text=L"", int Style=0, wxString Default=L"", wxArrayString ChoiceList=wxArrayString());
+		InputDialog(wxWindow* parent, wxFileConfig *langIni, wxFont font, wxString Title, wxString Text=L"", int Style=0, wxString Default=L"", wxArrayString ChoiceList=wxArrayString());
 		void OnText(wxCommandEvent& Event);
 		void OnChoice(wxCommandEvent &event);
 		void OnOK(wxCommandEvent &event);
