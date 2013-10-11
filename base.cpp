@@ -69,8 +69,8 @@ MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &si
 		inputSizer(0),
 		chatHistory(),
 		lastInput(),
-		chatBuffer(0),
-		seenUsers(0),
+		chatBuffer(),
+		seenUsers(),
 		userList(0),
 		ignoredUserList(0),
 		font(),
@@ -91,7 +91,7 @@ MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &si
 		disableOnText(false),
 		loginName(),
 		loginPassword(),
-		gameVersions(0) {
+		gameVersions() {
 	bool firstrun=false;
 	if (!wxFile::Exists(MoosApp::CONFIG_FILE)) {
 		wxFile(MoosApp::CONFIG_FILE, wxFile::write);

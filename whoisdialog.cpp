@@ -57,7 +57,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *langIni, wxArrayString 
 		statistics(0),
 		applybutton(0),
 		cancelbutton(0),
-		WhoisData(0),
+		WhoisData(),
 		socket(0) {
 	WhoisData[5].Replace(wxT("\t"), wxEmptyString);
 	WhoisData[5].Replace(wxT("\n"), wxEmptyString);
