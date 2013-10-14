@@ -137,7 +137,9 @@ MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &si
 	CreateStatusBar();
 	SetStatusText(langIni->Read(wxT("translations/statusbar/notconnected"), wxT("Not connected")));
 	wxFont tmp=wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-	if (moosIni->Exists(wxT("layout/fontface"))) tmp.SetFaceName(moosIni->Read(wxT("layout/fontface")));
+	if (moosIni->Exists(wxT("layout/fontface"))) {
+		tmp.SetFaceName(moosIni->Read(wxT("layout/fontface")));
+	}
 	if (moosIni->Exists(wxT("layout/fontsize"))) {
 		long tmp2;
 		moosIni->Read(wxT("layout/fontsize"), &tmp2);
