@@ -18,7 +18,7 @@ const wxString MoosApp::CONFIG_FILE(wxT("moos.ini"));
 
 bool MoosApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
-	MainFrame *win=new MainFrame(CONFIG_FILE, wxDefaultPosition, wxSize(720, 480));
+	MainFrame *win=new MainFrame("moos2.1", wxDefaultPosition, wxSize(720, 480));
 	win->Show();
 	SetTopWindow(win);
 	return true;

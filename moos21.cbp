@@ -38,14 +38,17 @@
 				</ExtraCommands>
 			</Target>
 		</Build>
+		<Compiler>
+			<Add option="-std=gnu++11" />
+		</Compiler>
 		<Linker>
-			<Add library="wxmsw29u_richtext" />
-			<Add library="wxmsw29u_html" />
-			<Add library="wxmsw29u_aui" />
-			<Add library="wxmsw29u_adv" />
-			<Add library="wxmsw29u_core" />
-			<Add library="wxbase29u" />
-			<Add library="wxbase29u_net" />
+			<Add library="wxmsw30u_richtext" />
+			<Add library="wxmsw30u_html" />
+			<Add library="wxmsw30u_aui" />
+			<Add library="wxmsw30u_adv" />
+			<Add library="wxmsw30u_core" />
+			<Add library="wxbase30u" />
+			<Add library="wxbase30u_net" />
 			<Add library="wxpng" />
 			<Add library="wxzlib" />
 			<Add library="comctl32" />
