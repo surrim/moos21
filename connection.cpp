@@ -94,8 +94,8 @@ void MainFrame::OnIncomingData() {
 		char cbuffer[10240];
 		unsigned long cbufferlen=10240;
 		if (uncompress((Bytef*)cbuffer, &cbufferlen, (const Bytef*)(buffer+4), packetlen-4)==Z_OK) {
-			unsigned int packettype=*((unsigned int*)cbuffer);
-			unsigned int contentlen=*((unsigned int*)(cbuffer+4));
+			unsigned int packettype=(cbuffer[0] << 24) | (cbuffer[1] << 16) | (cbuffer[2] << 8) | cbuffer[3];
+			unsigned int contentlen=(cbuffer[4] << 24) | (cbuffer[5] << 16) | (cbuffer[6] << 8) | cbuffer[7];
 			std::string content;
 			if (contentlen>packetlen) {
 				contentlen=packetlen-8;
@@ -104,7 +104,7 @@ void MainFrame::OnIncomingData() {
 				content+=cbuffer[i+8];
 			}
 			if (packettype==0) { //Success
-				unsigned int stringlen=*((unsigned int*)(cbuffer+8));
+				unsigned int stringlen=(cbuffer[8] << 24) | (cbuffer[9] << 16) | (cbuffer[10] << 8) | cbuffer[11];
 				if (stringlen>contentlen) {
 					//Aha das ist also dieser komische Ident
 				} else { //Welcome msg
@@ -114,7 +114,7 @@ void MainFrame::OnIncomingData() {
 					for (i=0;i!=stringlen;i++) {
 						identifier+=cbuffer[i+12];
 					}
-					stringlen=*((unsigned int*)(cbuffer+12+identifier.size()));
+					stringlen=(cbuffer[12+stringlen] << 24) | (cbuffer[13+stringlen] << 16) | (cbuffer[14+stringlen] << 8) | cbuffer[15+stringlen];;
 					for (i=0;i!=stringlen;i++) {
 						welcomemsg+=cbuffer[i+16+identifier.size()];
 					}
@@ -137,7 +137,7 @@ void MainFrame::OnIncomingData() {
 					}
 
 					while (true) {
-						unsigned int foundPosition=welcomemsg.find("<*>");
+						size_t foundPosition=welcomemsg.find("<*>");
 						if (foundPosition!=std::string::npos) {
 							welcomemsg=welcomemsg.substr(0, foundPosition)+"<0xFFFFFFFF>"+welcomemsg.substr(foundPosition+3);
 						} else {
@@ -145,32 +145,32 @@ void MainFrame::OnIncomingData() {
 						}
 					}
 
-					Message(welcomemsg);
+					Message(wxString(welcomemsg.data(), wxConvISO8859_1, welcomemsg.size()));
 					AddUser(loginName);
 					RefreshAutocomplete(loginName);
 					moosIni->Write(wxT("accounts/")+Base64Encode(loginName)+wxT("/password"), Base64Encode(loginPassword, true));
 				}
 			} else if (packettype==2) { //Error
-				if (content==wxT("translateInvalidCharactersInName")) {
+				if (content=="translateInvalidCharactersInName") {
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), langIni->Read(wxT("translations/dialogtext/illegalusername"),
 							   wxT("Error: Your user name contains invalid characters"))).ShowModal();
 					moosIni->DeleteGroup(wxT("accounts/")+Base64Encode(loginName));
 					loginName=wxEmptyString;
-				} else if (content==wxT("translateInvalidUserName")) {
+				} else if (content=="translateInvalidUserName") {
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"),
 							   langIni->Read(wxT("translations/dialogtext/userdoesntexist"), wxT("Error: Invalid user name"))).ShowModal();
 					moosIni->DeleteGroup(wxT("accounts/")+Base64Encode(loginName));
 					loginName=wxEmptyString;
-				} else if (content==wxT("translateInvalidPassword")) {
+				} else if (content=="translateInvalidPassword") {
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"),
 							   langIni->Read(wxT("translations/dialogtext/wrongpassword"), wxT("Error: Invalid password"))).ShowModal();
 					moosIni->DeleteEntry(wxT("accounts/")+Base64Encode(loginName)+wxT("/password"), false);
-				} else if (content==wxT("translateAlreadyLogIn")) {
+				} else if (content=="translateAlreadyLogIn") {
 					moosIni->Write(wxT("accounts/")+Base64Encode(loginName)+wxT("/password"), Base64Encode(loginPassword, true));
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"),
 							   langIni->Read(wxT("translations/dialogtext/allreadyloggedin"), wxT("Error: The user is already logged in"))).ShowModal();
 				} else {
-					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), content).ShowModal();
+					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), wxString(content.data(), wxConvISO8859_1, content.size())).ShowModal();
 					moosIni->DeleteGroup(wxT("accounts/")+Base64Encode(loginName));
 					loginName=wxEmptyString;
 				}

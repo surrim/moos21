@@ -4,6 +4,7 @@
 #include "tools.h"
 #include <wx/fileconf.h>
 #include <wx/filedlg.h>
+#include <wx/filename.h>
 #include <wx/fontdlg.h>
 #include <wx/menu.h>
 #include <wx/settings.h>
@@ -11,7 +12,7 @@
 #include <wx/stdpaths.h>
 #include <wx/wfstream.h>
 
-void MainFrame::OnAutoLoginAccount(wxCommandEvent& event) {
+void MainFrame::OnAutoLoginAccount(wxCommandEvent& WXUNUSED(event)) {
 	if (loginName==wxEmptyString) {
 		return settingsMenu->Check(ID_MAINWIN_AUTOLOGIN_ACCOUNT, false);
 	}
@@ -22,7 +23,7 @@ void MainFrame::OnAutoLoginAccount(wxCommandEvent& event) {
 	}
 }
 
-void MainFrame::OnBeepSound(wxCommandEvent& event) {
+void MainFrame::OnBeepSound(wxCommandEvent& WXUNUSED(event)) {
 	if (settingsMenu->IsChecked(ID_MAINWIN_SOUND_ON_BEEP)) {
 		wxFileDialog tmp(this, langIni->Read(wxT("translations/menus/settings/soundonbeep"), wxT("Play sound on beep")), wxEmptyString, moosIni->Read(wxT("beepsound"), wxT("%windir%\\Media\\notify.wav")), langIni->Read(wxT("translations/other/soundfiles"), wxT("Sound Files"))+wxT(" (*.wav)|*.wav|")+langIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 		if (tmp.ShowModal()!=wxID_OK) return settingsMenu->Check(ID_MAINWIN_SOUND_ON_BEEP, false);
@@ -33,7 +34,7 @@ void MainFrame::OnBeepSound(wxCommandEvent& event) {
 	}
 }
 
-void MainFrame::OnDisableSlaps(wxCommandEvent& event) {
+void MainFrame::OnDisableSlaps(wxCommandEvent& WXUNUSED(event)) {
 	moosIni->DeleteEntry(wxT("disableslaps"));
 	if (settingsMenu->IsChecked(ID_MAINWIN_DISABLE_SLAPS)) moosIni->Write(wxT("disableslaps"), true);
 }
