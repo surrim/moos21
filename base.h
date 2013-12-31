@@ -1,7 +1,7 @@
 #ifndef BASE_H
 #define BASE_H
 
-#include <vector>
+#include <map>
 #include <wx/app.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
@@ -16,13 +16,6 @@ class wxSocketEvent;
 class wxTaskBarIcon;
 class wxFileConfig;
 class wxSocketClient;
-
-struct version {
-	version(): id(0), name(){
-	}
-	int id;
-	wxString name;
-};
 
 class MoosApp: public wxApp {
 	public:
@@ -131,7 +124,7 @@ class MainFrame: public wxFrame {
 		bool disableOnText;
 		wxString loginName;
 		wxString loginPassword;
-		std::vector<version> gameVersions;
+		std::map<int32_t, wxString> gameVersions;
 
 	DECLARE_EVENT_TABLE()
 };
