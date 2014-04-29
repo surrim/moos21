@@ -137,7 +137,7 @@ void MainFrame::OnIncomingData() {
 					}
 
 					while (true) {
-						unsigned int foundPosition=welcomemsg.find("<*>");
+						size_t foundPosition=welcomemsg.find("<*>");
 						if (foundPosition!=std::string::npos) {
 							welcomemsg=welcomemsg.substr(0, foundPosition)+"<0xFFFFFFFF>"+welcomemsg.substr(foundPosition+3);
 						} else {
