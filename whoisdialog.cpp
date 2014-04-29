@@ -260,7 +260,7 @@ WhoisDialog::WhoisDialog(wxWindow* parent, wxFileConfig *langIni, wxArrayString 
 	SetSize(wxDefaultCoord, wxDefaultCoord, GetCharHeight()*19+52, wxDefaultCoord);
 }
 
-void WhoisDialog::OnChoice(wxCommandEvent &event) {
+void WhoisDialog::OnChoice(wxCommandEvent&WXUNUSED(event)) {
 	if (WhoisData.GetCount()!=11) { //hasplayed
 		double tmp;
 		WhoisData[gamename->GetSelection()*37+12].ToDouble(&tmp);
@@ -276,7 +276,7 @@ void WhoisDialog::OnChoice(wxCommandEvent &event) {
 	}
 }
 
-void WhoisDialog::OnApply(wxCommandEvent &event) {
+void WhoisDialog::OnApply(wxCommandEvent& WXUNUSED(event)) {
 	if (socket->IsConnected()) {
 		wxString tmp=email->GetValue();
 		tmp.Replace(wxT("\t"), wxEmptyString);
@@ -316,6 +316,6 @@ void WhoisDialog::OnApply(wxCommandEvent &event) {
 	Destroy();
 }
 
-void WhoisDialog::OnCancel(wxCommandEvent &event) {
+void WhoisDialog::OnCancel(wxCommandEvent& WXUNUSED(event)) {
 	Destroy();
 }
