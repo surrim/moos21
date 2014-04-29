@@ -7,7 +7,7 @@
 #include <wx/menu.h>
 #include <wx/socket.h>
 
-void MainFrame::OnWhoisUser(wxCommandEvent &event) {
+void MainFrame::OnWhoisUser(wxCommandEvent& WXUNUSED(event)) {
 	chatInput->SetFocus();
 	if (!socket->IsConnected()) return;
 	wxArrayInt selections;
@@ -26,7 +26,7 @@ void MainFrame::OnWhoisUser(wxCommandEvent &event) {
 	}
 }
 
-void MainFrame::OnSlapUser(wxCommandEvent &event) {
+void MainFrame::OnSlapUser(wxCommandEvent& WXUNUSED(event)) {
 	if (!userList->GetCount() || settingsMenu->IsChecked(ID_MAINWIN_DISABLE_SLAPS)) {
 		return;
 	}
@@ -64,7 +64,7 @@ void MainFrame::OnSlapUser(wxCommandEvent &event) {
 	chatInput->SetFocus();
 }
 
-void MainFrame::OnIgnoreUser(wxCommandEvent &event) {
+void MainFrame::OnIgnoreUser(wxCommandEvent& WXUNUSED(event)) {
 	wxArrayInt selections;
 	if (!userList->GetSelections(selections)) { //nobody selected
 		wxArrayString tmp2=seenUsers;

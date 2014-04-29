@@ -6,6 +6,7 @@
 #include <wx/file.h>
 #include <wx/fileconf.h>
 #include <wx/font.h>
+#include <wx/icon.h>
 #include <wx/image.h>
 #include <wx/menu.h>
 #include <wx/settings.h>
@@ -18,7 +19,7 @@ const wxString MoosApp::CONFIG_FILE(wxT("moos.ini"));
 
 bool MoosApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
-	MainFrame *win=new MainFrame(CONFIG_FILE, wxDefaultPosition, wxSize(720, 480));
+	MainFrame *win=new MainFrame(L"moos2.1", wxDefaultPosition, wxSize(720, 480));
 	win->Show();
 	SetTopWindow(win);
 	return true;
@@ -271,14 +272,14 @@ MainFrame::~MainFrame() {
 	moosIni->Save(tmp, wxConvUTF8);
 }
 
-void MainFrame::OnSelectChannel(wxCommandEvent &event) {
+void MainFrame::OnSelectChannel(wxCommandEvent& WXUNUSED(event)) {
 	write(wxT("/join \"")+channelSwitcher->GetStringSelection()+wxT("\""));
 	whisperCheckbox->SetValue(false);
 	userList->DeselectAll();
 	chatInput->SetFocus();
 }
 
-void MainFrame::OnSelectUser(wxCommandEvent& event) {
+void MainFrame::OnSelectUser(wxCommandEvent& WXUNUSED(event)) {
 	wxArrayInt selections;
 	if (!userList->GetSelections(selections)) {
 		whisperCheckbox->SetValue(false);
@@ -286,7 +287,7 @@ void MainFrame::OnSelectUser(wxCommandEvent& event) {
 	chatInput->SetFocus();
 }
 
-void MainFrame::OnWhisperClick(wxCommandEvent& event) {
+void MainFrame::OnWhisperClick(wxCommandEvent& WXUNUSED(event)) {
 	wxArrayInt selections;
 	if (!userList->GetSelections(selections)) {
 		whisperCheckbox->SetValue(false);
@@ -350,7 +351,7 @@ void MainFrame::OnSendMessage(wxCommandEvent& WXUNUSED(event)) {
 	chatInput->Clear();
 }
 
-void MainFrame::OnText(wxCommandEvent& event) {
+void MainFrame::OnText(wxCommandEvent& WXUNUSED(event)) {
 	if (chatInput->GetInsertionPoint()==chatInput->GetLastPosition() && !chatInput->GetStringSelection().Len()
 			&& !disableOnText && lastInput.Len()<chatInput->GetValue().Len()) {
 		lastInput=chatInput->GetValue();

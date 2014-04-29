@@ -54,13 +54,13 @@ InfoDialog::InfoDialog(wxWindow* parent, wxFileConfig *langIni, const wxFont& fo
 	SetAutoLayout(true);
 }
 
-void InfoDialog::OnButton1(wxCommandEvent &event) {
+void InfoDialog::OnButton1(wxCommandEvent& WXUNUSED(event)) {
 	if (style) {
 		EndModal(wxID_YES);
 	}
 	else EndModal(wxID_OK);
 }
 
-void InfoDialog::OnButton2(wxCommandEvent &event) {
+void InfoDialog::OnButton2(wxCommandEvent& WXUNUSED(event)) {
 	EndModal(wxID_NO);
 }

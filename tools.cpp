@@ -71,7 +71,7 @@ wxString MoonCode2HTML(const wxString MoonCode) { //<0xAABBGGRR> --> RRGGBB
 		   +Number2Hex(a*((Hex2Number(MoonCode[5])<<4)|Hex2Number(MoonCode[6]))/255)+wxT("\">");
 }
 
-wxString Base64Encode(const wxString &data, bool encrypt) {
+wxString Base64Encode(const wxString& data, bool encrypt) {
 	std::string cvt="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
 	if (encrypt) {
 		cvt="WS4FtwfL8DTrjzJN9PY0gOohxbC71VMn3Zs6BQm5pd2aHyRe+kIUEvqK-iGlcXAu";
@@ -100,10 +100,10 @@ wxString Base64Encode(const wxString &data, bool encrypt) {
 			ret+='=';
 		}
 	}
-	return ret;
+	return wxString(ret.data(), wxConvISO8859_1, ret.size());
 }
 
-wxString Base64Decode(const wxString &data, bool encrypt) {
+wxString Base64Decode(const wxString& data, bool encrypt) {
 	std::string cvt="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
 	if (encrypt) {
 		cvt="WS4FtwfL8DTrjzJN9PY0gOohxbC71VMn3Zs6BQm5pd2aHyRe+kIUEvqK-iGlcXAu";
@@ -132,5 +132,5 @@ wxString Base64Decode(const wxString &data, bool encrypt) {
 			ret+=c;
 		}
 	}
-	return ret;
+	return wxString(ret.data(), wxConvISO8859_1, ret.size());
 }

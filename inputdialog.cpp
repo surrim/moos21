@@ -81,7 +81,7 @@ InputDialog::InputDialog(wxWindow* parent, wxFileConfig *langIni, const wxFont& 
 	SetInitialSize();
 }
 
-void InputDialog::OnText(wxCommandEvent& Event) {
+void InputDialog::OnText(wxCommandEvent& WXUNUSED(event)) {
 	saved=input->GetValue();
 	if (style>1) {
 		if (choice->FindString(saved)!=wxNOT_FOUND) {
@@ -92,20 +92,20 @@ void InputDialog::OnText(wxCommandEvent& Event) {
 	}
 }
 
-void InputDialog::OnChoice(wxCommandEvent &event) {
+void InputDialog::OnChoice(wxCommandEvent& WXUNUSED(event)) {
 	saved=choice->GetStringSelection();
 	if (style<=2) {
 		input->SetValue(saved);
 	}
 }
 
-void InputDialog::OnOK(wxCommandEvent &event) {
+void InputDialog::OnOK(wxCommandEvent& WXUNUSED(event)) {
 	if (style<=1 || style==4 || saved!=wxEmptyString) {
 		EndModal(wxID_OK);
 	}
 }
 
-void InputDialog::OnCancel(wxCommandEvent &event) {
+void InputDialog::OnCancel(wxCommandEvent& WXUNUSED(event)) {
 	EndModal(wxID_CANCEL);
 }
 
