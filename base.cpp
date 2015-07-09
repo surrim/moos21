@@ -63,7 +63,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &size):
-		wxFrame(0, -1, title, pos, size),
+		wxFrame(nullptr, wxID_ANY, title, pos, size),
 		mainSizer(0),
 		listSizer(0),
 		chatSizer(0),
@@ -523,4 +523,3 @@ void MainFrame::RefreshAutocomplete(wxString User, bool Event) {
 		seenUsers.Add(User);
 	}
 }
-
