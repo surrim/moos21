@@ -4,12 +4,41 @@
 #include "infodialog.h"
 #include "tools.h"
 #include "whoisdialog.h"
+#include <cinttypes>
 #include <wx/menu.h>
 #include <wx/sound.h>
 #include <wx/socket.h>
 #include <wx/fileconf.h>
 #include <zlib.h>
-#include <inttypes.h>
+
+static std::string compressMessage(const std::string& message) {
+	uLongf compressedMessageSize = 1000;
+	std::string compressedMessage(compressedMessageSize, '\0');
+	if (compress((Bytef*)compressedMessage.data(), &compressedMessageSize, (const Bytef*)message.data(), message.size()) != Z_OK) {
+		throw std::string("compression error");
+	}
+	return compressedMessage.substr(0, compressedMessageSize);
+}
+
+static std::string invertLength(uint32_t length) {
+	std::string invertedLength(4, '\0');
+	invertedLength[0] = length;
+	invertedLength[1] = length << 8;
+	invertedLength[2] = length << 16;
+	invertedLength[3] = length << 24;
+	return invertedLength;
+}
+
+static std::string generateLoginMessage(const wxString& loginUser, const wxString& loginPassword) {
+	std::string loginData = invertLength(loginUser.Len());
+	loginData += loginUser.ToUTF8();
+	loginData += invertLength(loginPassword.Len());
+	loginData += loginPassword.ToUTF8();
+	loginData += invertLength(0);
+	loginData += invertLength(0);
+	auto compressedMessage = compressMessage(loginData);
+	return invertLength(compressedMessage.length() + 4) + compressedMessage;
+}
 
 void MainFrame::OnSocketEvent(wxSocketEvent& event) {
 	switch (event.GetSocketEvent()) {
@@ -382,37 +411,6 @@ wxString MainFrame::getVersion(const wxString& id) {
 	id.ToLong(&tmp);
 	std::map<int32_t, wxString>::iterator found=gameVersions.find(tmp);
 	return found!=gameVersions.end()?found->second:wxT("Earth 2150");
-}
-
-std::string MainFrame::encodeMessage(const std::string& message) {
-	unsigned char buffer[1024];
-	unsigned long length=1024;
-	compress((Bytef*)buffer, &length, (const Bytef*)message.c_str(), message.size());
-	std::string _;
-	for (unsigned int i=0;i!=length;i++) {
-		_+=buffer[i];
-	}
-	return _;
-}
-
-std::string MainFrame::getInvertedLength(unsigned int length) {
-	std::string _;
-	_+=*(((char*)&length));
-	_+=*(((char*)&length)+1);
-	_+=*(((char*)&length)+2);
-	_+=*(((char*)&length)+3);
-	return _;
-}
-
-std::string MainFrame::generateLoginMessage(const wxString& loginUser, const wxString& loginPassword) {
-	std::string loginData=getInvertedLength(loginUser.Len());
-	loginData+=loginUser.To8BitData();
-	loginData+=getInvertedLength(loginPassword.Len());
-	loginData+=loginPassword.To8BitData();
-	loginData+=getInvertedLength(0);
-	loginData+=getInvertedLength(0);
-	std::string _=encodeMessage(loginData);
-	return getInvertedLength(_.length()+4)+_;
 }
 
 void MainFrame::write(const wxString& data) {

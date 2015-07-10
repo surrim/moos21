@@ -42,7 +42,7 @@ class MainFrame: public wxFrame {
 		void SetChannel(wxString Channel);
 		void RemoveChannel(wxString Channel);
 		void RemoveAllChannelsAndUsers();
-		void RefreshAutocomplete(wxString User, bool Event=true);
+		void RefreshAutocomplete(wxString User, bool Event = true);
 
 		//connection.cpp - socket
 		void OnSocketEvent(wxSocketEvent& event);
@@ -52,9 +52,6 @@ class MainFrame: public wxFrame {
 
 		void parseProcessCommand(const wxString& strData);
 		wxString getVersion(const wxString& id);
-		std::string encodeMessage(const std::string& message);
-		std::string getInvertedLength(unsigned int length);
-		std::string generateLoginMessage(const wxString& loginUser, const wxString& loginPassword);
 		void write(const wxString& data);
 		void loginAs(const wxString& loginName, const wxString& loginPassword, const wxString& server=wxEmptyString, const wxString& port=wxEmptyString);
 
