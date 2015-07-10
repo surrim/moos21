@@ -80,93 +80,93 @@ void MainFrame::OnConnect() {
 
 void MainFrame::OnIncomingData() {
 	uint8_t inputbuffer[1024];
-	uint32_t inputbufferlen=1024;
-	uint8_t *buffer=new uint8_t[0]; //for delete
-	uint32_t bufferlen=0;
+	uint32_t inputbufferlen = 1024;
+	uint8_t *buffer = new uint8_t[0]; //for delete
+	uint32_t bufferlen = 0;
 
-	while (inputbufferlen==1024) {
+	while (inputbufferlen == 1024) {
 		socket->Read(inputbuffer, 1024);
-		inputbufferlen=socket->LastCount();
-		uint8_t *tmp=new uint8_t[bufferlen+inputbufferlen];
-		for (uint32_t i=0;i!=bufferlen;i++) {
-			tmp[i]=buffer[i];
+		inputbufferlen = socket->LastCount();
+		uint8_t *tmp = new uint8_t[bufferlen+inputbufferlen];
+		for (uint32_t i = 0; i != bufferlen; i++) {
+			tmp[i] = buffer[i];
 		}
-		for (uint32_t i=0;i!=inputbufferlen;i++) {
-			tmp[bufferlen+i]=inputbuffer[i];
+		for (uint32_t i = 0; i != inputbufferlen; i++) {
+			tmp[bufferlen + i] = inputbuffer[i];
 		}
 		delete[] buffer;
-		buffer=tmp;
-		bufferlen+=inputbufferlen;
+		buffer = tmp;
+		bufferlen += inputbufferlen;
 	}
 
 	a:
 	if (buffer[0]=='/' || buffer[0]=='$') {
 		std::string command="";
-		for (uint32_t i=0;i!=bufferlen;i++) {
+		for (uint32_t i = 0; i != bufferlen; i++) {
 			if (!buffer[i]) {
 				parseProcessCommand(wxConvLibc.cMB2WC(command.c_str()));
-				uint8_t *tmp=new uint8_t[bufferlen-(i+1)];
-				for (uint32_t j=i+1;j!=bufferlen;j++) {
-					tmp[j-(i+1)]=buffer[j];
+				uint8_t *tmp = new uint8_t[bufferlen - (i + 1)];
+				for (uint32_t j = i + 1; j != bufferlen; j++) {
+					tmp[j - (i + 1)] = buffer[j];
 				}
-				bufferlen-=i+1;
+				bufferlen -= i + 1;
 				delete[] buffer;
-				buffer=tmp;
+				buffer = tmp;
 				goto a;
 			} else {
-				command+=buffer[i];
+				command += buffer[i];
 			}
 		}
 		delete[] buffer;
 		return;
 	} else { //compressed data
-		uint32_t packetlen=*((uint32_t*)buffer);
+		uint32_t packetlen = *((uint32_t*)buffer);
 		char cbuffer[10240];
-		unsigned long cbufferlen=10240;
+		uLongf cbufferlen = 10240;
 		if (uncompress((Bytef*)cbuffer, &cbufferlen, (const Bytef*)(buffer+4), packetlen-4)==Z_OK) {
-			unsigned int packettype=(cbuffer[0] << 24) | (cbuffer[1] << 16) | (cbuffer[2] << 8) | cbuffer[3];
-			unsigned int contentlen=(cbuffer[4] << 24) | (cbuffer[5] << 16) | (cbuffer[6] << 8) | cbuffer[7];
+			uint32_t packettype = (cbuffer[0] << 24) | (cbuffer[1] << 16) | (cbuffer[2] << 8) | cbuffer[3];
+			uint32_t contentlen = (cbuffer[4] << 24) | (cbuffer[5] << 16) | (cbuffer[6] << 8) | cbuffer[7];
 			std::string content;
-			if (contentlen>packetlen) {
-				contentlen=packetlen-8;
+			if (contentlen > packetlen) {
+				contentlen = packetlen-8;
 			}
-			for (uint32_t i=0;i!=contentlen;i++) {
-				content+=cbuffer[i+8];
+			for (uint32_t i = 0; i != contentlen; i++) {
+				content += cbuffer[i + 8];
 			}
 			if (packettype==0) { //Success
-				unsigned int stringlen=(cbuffer[8] << 24) | (cbuffer[9] << 16) | (cbuffer[10] << 8) | cbuffer[11];
-				if (stringlen>contentlen) {
+				uint32_t stringlen = (cbuffer[8] << 24) | (cbuffer[9] << 16) | (cbuffer[10] << 8) | cbuffer[11];
+				if (stringlen > contentlen) {
 					//Aha das ist also dieser komische Ident
 				} else { //Welcome msg
 					std::string identifier;
 					std::string welcomemsg;
 
-					for (uint32_t i=0;i!=stringlen;i++) {
-						identifier+=cbuffer[i+12];
+					for (uint32_t i = 0; i != stringlen; i++) {
+						identifier += cbuffer[i + 12];
 					}
-					stringlen=(cbuffer[12+stringlen] << 24) | (cbuffer[13+stringlen] << 16) | (cbuffer[14+stringlen] << 8) | cbuffer[15+stringlen];;
-					for (uint32_t i=0;i!=stringlen;i++) {
-						welcomemsg+=cbuffer[i+16+identifier.size()];
+					stringlen = (cbuffer[12+stringlen] << 24) | (cbuffer[13+stringlen] << 16) | (cbuffer[14+stringlen] << 8) | cbuffer[15+stringlen];;
+					for (uint32_t i = 0; i != stringlen; i++) {
+						welcomemsg += cbuffer[i + 16 + identifier.size()];
 					}
 					wxIPV4address tmp;
 					socket->GetPeer(tmp);
 					SetStatusText(Format(langIni->Read(wxT("translations/statusbar/connected"), wxT("Connected with <%0> (<%1>)")), tmp.Hostname(), tmp.IPAddress()));
 					//detect Game Versions
-					uint32_t vdx=16+identifier.size()+welcomemsg.size()+44;
-					uint32_t versionlen=0;
+					uint32_t vdx = 16 + identifier.size()+welcomemsg.size() + 44;
+					uint32_t versionlen = 0;
 					gameVersions.clear();
 					while (~cbuffer[vdx]) {
-						int32_t id=cbuffer[vdx];
+						int32_t id = cbuffer[vdx];
 						std::string name=std::string(&cbuffer[vdx+5], versionlen);
-						versionlen=*((uint32_t*)(cbuffer+vdx+1));
-						gameVersions[id]=wxString(name.c_str(), wxConvISO8859_1);
-						vdx+=5+versionlen;
+						versionlen = *((uint32_t*)(cbuffer + vdx + 1));
+						gameVersions[id] = wxString(name.c_str(), wxConvISO8859_1);
+						vdx += 5 + versionlen;
 					}
 
 					while (true) {
-						size_t foundPosition=welcomemsg.find("<*>");
-						if (foundPosition!=std::string::npos) {
-							welcomemsg=welcomemsg.substr(0, foundPosition)+"<0xFFFFFFFF>"+welcomemsg.substr(foundPosition+3);
+						auto foundPosition = welcomemsg.find("<*>");
+						if (foundPosition != std::string::npos) {
+							welcomemsg = welcomemsg.substr(0, foundPosition)+"<0xFFFFFFFF>" + welcomemsg.substr(foundPosition + 3);
 						} else {
 							break;
 						}
@@ -175,31 +175,31 @@ void MainFrame::OnIncomingData() {
 					Message(wxString(welcomemsg.data(), wxConvISO8859_1, welcomemsg.size()));
 					AddUser(loginName);
 					RefreshAutocomplete(loginName);
-					moosIni->Write(wxT("accounts/")+Base64Encode(loginName)+wxT("/password"), Base64Encode(loginPassword, true));
+					moosIni->Write(wxT("accounts/") + Base64Encode(loginName) + wxT("/password"), Base64Encode(loginPassword, true));
 				}
-			} else if (packettype==2) { //Error
-				if (content=="translateInvalidCharactersInName") {
+			} else if (packettype == 2) { //Error
+				if (content == "translateInvalidCharactersInName") {
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), langIni->Read(wxT("translations/dialogtext/illegalusername"),
 							   wxT("Error: Your user name contains invalid characters"))).ShowModal();
-					moosIni->DeleteGroup(wxT("accounts/")+Base64Encode(loginName));
-					loginName=wxEmptyString;
-				} else if (content=="translateInvalidUserName") {
+					moosIni->DeleteGroup(wxT("accounts/") + Base64Encode(loginName));
+					loginName = wxEmptyString;
+				} else if (content == "translateInvalidUserName") {
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"),
 							   langIni->Read(wxT("translations/dialogtext/userdoesntexist"), wxT("Error: Invalid user name"))).ShowModal();
-					moosIni->DeleteGroup(wxT("accounts/")+Base64Encode(loginName));
-					loginName=wxEmptyString;
-				} else if (content=="translateInvalidPassword") {
+					moosIni->DeleteGroup(wxT("accounts/") + Base64Encode(loginName));
+					loginName = wxEmptyString;
+				} else if (content == "translateInvalidPassword") {
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"),
 							   langIni->Read(wxT("translations/dialogtext/wrongpassword"), wxT("Error: Invalid password"))).ShowModal();
-					moosIni->DeleteEntry(wxT("accounts/")+Base64Encode(loginName)+wxT("/password"), false);
-				} else if (content=="translateAlreadyLogIn") {
-					moosIni->Write(wxT("accounts/")+Base64Encode(loginName)+wxT("/password"), Base64Encode(loginPassword, true));
+					moosIni->DeleteEntry(wxT("accounts/") + Base64Encode(loginName) + wxT("/password"), false);
+				} else if (content == "translateAlreadyLogIn") {
+					moosIni->Write(wxT("accounts/") + Base64Encode(loginName) + wxT("/password"), Base64Encode(loginPassword, true));
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"),
 							   langIni->Read(wxT("translations/dialogtext/allreadyloggedin"), wxT("Error: The user is already logged in"))).ShowModal();
 				} else {
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), wxString(content.data(), wxConvISO8859_1, content.size())).ShowModal();
-					moosIni->DeleteGroup(wxT("accounts/")+Base64Encode(loginName));
-					loginName=wxEmptyString;
+					moosIni->DeleteGroup(wxT("accounts/") + Base64Encode(loginName));
+					loginName = wxEmptyString;
 				}
 				SetStatusText(langIni->Read(wxT("translations/statusbar/notconnected"), wxT("Not connected")));
 				if (socket->IsConnected()) {
@@ -208,18 +208,18 @@ void MainFrame::OnIncomingData() {
 			}
 		}
 
-		if (bufferlen<=packetlen) {
+		if (bufferlen <= packetlen) {
 			delete[] buffer;
-			bufferlen=0;
+			bufferlen = 0;
 			return;
 		}
-		uint8_t *tmp=new uint8_t[bufferlen-packetlen];
-		for (uint32_t i=packetlen;i!=bufferlen;i++) {
-			tmp[i-packetlen]=buffer[i];
+		uint8_t *tmp = new uint8_t[bufferlen-packetlen];
+		for (uint32_t i = packetlen; i != bufferlen; i++) {
+			tmp[i - packetlen] = buffer[i];
 		}
-		bufferlen-=packetlen;
+		bufferlen -= packetlen;
 		delete[] buffer;
-		buffer=tmp;
+		buffer = tmp;
 		goto a;
 	}
 }
