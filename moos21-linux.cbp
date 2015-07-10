@@ -43,10 +43,11 @@
 		</Build>
 		<Compiler>
 			<Add option="`wx-config-3.0 --cppflags`" />
+			<Add option="`pkg-config zlib --cflags`" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config-3.0 --libs`" />
-			<Add library="z" />
+			<Add option="`pkg-config zlib --libs`" />
 		</Linker>
 		<Unit filename="src/base.cpp" />
 		<Unit filename="src/base.h" />
