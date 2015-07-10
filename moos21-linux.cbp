@@ -14,6 +14,7 @@
 				<Option use_console_runner="0" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-Wno-deprecated-declarations" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,10 +23,10 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-O2" />
 					<Add option="-march=prescott" />
 					<Add option="-fomit-frame-pointer" />
 					<Add option="-fexpensive-optimizations" />
-					<Add option="-O2" />
 					<Add option="-fno-exceptions" />
 					<Add option="-DNDEBUG" />
 				</Compiler>
@@ -41,30 +42,30 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="`wx-config --cflags`" />
+			<Add option="`wx-config-3.0 --cppflags`" />
 		</Compiler>
 		<Linker>
-			<Add option="`wx-config --libs`" />
+			<Add option="`wx-config-3.0 --libs`" />
 			<Add library="z" />
 		</Linker>
-		<Unit filename="base.cpp" />
-		<Unit filename="base.h" />
-		<Unit filename="connection.cpp" />
-		<Unit filename="enums.h" />
-		<Unit filename="helpmenu.cpp" />
-		<Unit filename="infodialog.cpp" />
-		<Unit filename="infodialog.h" />
-		<Unit filename="inputdialog.cpp" />
-		<Unit filename="inputdialog.h" />
-		<Unit filename="moos21_private.h" />
-		<Unit filename="moosmenu.cpp" />
-		<Unit filename="settingsmenu.cpp" />
-		<Unit filename="tools.cpp" />
-		<Unit filename="tools.h" />
-		<Unit filename="usermenu.cpp" />
-		<Unit filename="viewmenu.cpp" />
-		<Unit filename="whoisdialog.cpp" />
-		<Unit filename="whoisdialog.h" />
+		<Unit filename="src/base.cpp" />
+		<Unit filename="src/base.h" />
+		<Unit filename="src/connection.cpp" />
+		<Unit filename="src/enums.h" />
+		<Unit filename="src/helpmenu.cpp" />
+		<Unit filename="src/infodialog.cpp" />
+		<Unit filename="src/infodialog.h" />
+		<Unit filename="src/inputdialog.cpp" />
+		<Unit filename="src/inputdialog.h" />
+		<Unit filename="src/moos21_private.h" />
+		<Unit filename="src/moosmenu.cpp" />
+		<Unit filename="src/settingsmenu.cpp" />
+		<Unit filename="src/tools.cpp" />
+		<Unit filename="src/tools.h" />
+		<Unit filename="src/usermenu.cpp" />
+		<Unit filename="src/viewmenu.cpp" />
+		<Unit filename="src/whoisdialog.cpp" />
+		<Unit filename="src/whoisdialog.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
