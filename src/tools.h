@@ -4,7 +4,7 @@
 #include <wx/colour.h>
 #include <wx/string.h>
 
-wxString Format(wxString Text, const wxString Input0, const wxString Input1=L"", const wxString Input2=L"", const wxString Input3=L"");
+wxString Format(wxString Text, const wxString Input0, const wxString Input1=wxT(""), const wxString Input2=wxT(""), const wxString Input3=wxT(""));
 bool IsHex(const wxString Text);
 unsigned char Hex2Number(const unsigned char Hex); //F --> 15
 wxString Number2Hex(const unsigned char Number); //255 --> FF

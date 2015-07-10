@@ -6,6 +6,7 @@
 #include <wx/checkbox.h>
 #include <wx/choice.h>
 #include <wx/frame.h>
+#include <wx/fontdata.h>
 #include <wx/cmndata.h>
 #include <wx/listbox.h>
 #include <wx/sizer.h>
