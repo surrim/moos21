@@ -8,7 +8,6 @@
 #include <wx/socket.h>
 
 void MainFrame::OnWhoisUser(wxCommandEvent& WXUNUSED(event)) {
-	chatInput->SetFocus();
 	if (!socket->IsConnected()) return;
 	wxArrayInt selections;
 	if (!userList->GetSelections(selections)) { //nobody selected
@@ -61,7 +60,6 @@ void MainFrame::OnSlapUser(wxCommandEvent& WXUNUSED(event)) {
 	for (size_t i=0;i!=users.GetCount();i++) {
 		write(wxT("/send \"<0xFF0000FF>slaps <0xFF2153E8>")+users[i]+wxT("<0xFF0000FF> with ")+tmp2+wxT("\""));
 	}
-	chatInput->SetFocus();
 }
 
 void MainFrame::OnIgnoreUser(wxCommandEvent& WXUNUSED(event)) {
@@ -110,7 +108,6 @@ void MainFrame::OnIgnoreList(wxCommandEvent & WXUNUSED(event)) {
 		for (size_t i=0;i!=tmp3->GetSelections().GetCount();i++) {
 			UnignoreUser(tmp3->GetSelections()[i]);
 		}
-		chatInput->SetFocus();
 	}
 }
 

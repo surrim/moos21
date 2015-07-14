@@ -40,7 +40,6 @@ void MainFrame::OnLoginAs(wxCommandEvent & WXUNUSED(event)) {
 		loginAs(User, Password, moosIni->Read(wxT("accounts/")+Base64Encode(User)+wxT("/server"), wxT("netserver.earth2150.com")),
 				moosIni->Read(wxT("server/")+moosIni->Read(wxT("accounts/")+Base64Encode(User)+wxT("/server"),
 							  wxT("netserver.earth2150.com"))+wxT("/port"), wxT("17171")));
-		chatInput->SetFocus();
 	}
 }
 
@@ -52,7 +51,6 @@ void MainFrame::OnLogout(wxCommandEvent & WXUNUSED(event)) {
 		socket->Close();
 	}
 	SetStatusText(langIni->Read(wxT("translations/statusbar/notconnected"), wxT("Not connected")));
-	chatInput->SetFocus();
 }
 
 void MainFrame::OnExit(wxCommandEvent & WXUNUSED(event)) {

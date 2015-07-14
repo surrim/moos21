@@ -6,6 +6,7 @@
 #include "whoisdialog.h"
 #include <cinttypes>
 #include <wx/menu.h>
+#include <wx/msgdlg.h>
 #include <wx/sound.h>
 #include <wx/socket.h>
 #include <wx/fileconf.h>
@@ -15,7 +16,7 @@ static std::string compressMessage(const std::string& message) {
 	uLongf compressedMessageSize = 1000;
 	std::string compressedMessage(compressedMessageSize, '\0');
 	if (compress((Bytef*)compressedMessage.data(), &compressedMessageSize, (const Bytef*)message.data(), message.size()) != Z_OK) {
-		throw std::string("compression error");
+		wxMessageDialog(nullptr, wxT("compression error"), wxT("moos2.1"), wxOK | wxCENTRE | wxICON_ERROR).ShowModal();
 	}
 	return compressedMessage.substr(0, compressedMessageSize);
 }
@@ -213,7 +214,7 @@ void MainFrame::OnIncomingData() {
 			bufferlen = 0;
 			return;
 		}
-		uint8_t *tmp = new uint8_t[bufferlen-packetlen];
+		uint8_t *tmp = new uint8_t[bufferlen - packetlen];
 		for (uint32_t i = packetlen; i != bufferlen; i++) {
 			tmp[i - packetlen] = buffer[i];
 		}

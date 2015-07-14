@@ -64,31 +64,31 @@ END_EVENT_TABLE()
 
 MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &size):
 		wxFrame(nullptr, wxID_ANY, title, pos, size),
-		mainSizer(0),
-		listSizer(0),
-		chatSizer(0),
-		inputSizer(0),
+		mainSizer(nullptr),
+		listSizer(nullptr),
+		chatSizer(nullptr),
+		inputSizer(nullptr),
 		chatHistory(),
 		lastInput(),
 		chatBuffer(),
 		seenUsers(),
-		userList(0),
-		ignoredUserList(0),
+		userList(nullptr),
+		ignoredUserList(nullptr),
 		font(),
-		channelSwitcher(0),
-		chatView(0),
-		chatInput(0),
-		whisperCheckbox(0),
-		moosMenu(0),
-		userMenu(0),
-		viewMenu(0),
-		settingsMenu(0),
-		helpMenu(0),
-		moosIcon(0),
-		menuBar(0),
-		moosIni(0),
-		langIni(0),
-		socket(0),
+		channelSwitcher(nullptr),
+		chatView(nullptr),
+		chatInput(nullptr),
+		whisperCheckbox(nullptr),
+		moosMenu(nullptr),
+		userMenu(nullptr),
+		viewMenu(nullptr),
+		settingsMenu(nullptr),
+		helpMenu(nullptr),
+		moosIcon(nullptr),
+		menuBar(nullptr),
+		moosIni(nullptr),
+		langIni(nullptr),
+		socket(nullptr),
 		disableOnText(false),
 		loginName(),
 		loginPassword(),
@@ -205,13 +205,13 @@ MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &si
 
 	//Elemente
 	SetFont(font.GetChosenFont());
-	channelSwitcher=new wxChoice(this, ID_MAINWIN_CHANNELSWITCHER, wxDefaultPosition, wxDefaultSize, 0, 0, wxSTATIC_BORDER);
+	channelSwitcher=new wxChoice(this, ID_MAINWIN_CHANNELSWITCHER, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxSTATIC_BORDER);
 	channelSwitcher->SetBackgroundColour(wxColour(31, 48, 56));
 	channelSwitcher->SetForegroundColour(wxColour(140, 158, 180));
-	userList=new wxListBox(this, ID_MAINWIN_USERLIST, wxDefaultPosition, wxSize(200,200), 0, 0, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT|wxSTATIC_BORDER);
+	userList=new wxListBox(this, ID_MAINWIN_USERLIST, wxDefaultPosition, wxSize(200,200), 0, nullptr, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT|wxSTATIC_BORDER);
 	userList->SetBackgroundColour(wxColour(31, 48, 56));
 	userList->SetForegroundColour(wxColour(140, 158, 180));
-	ignoredUserList=new wxListBox(this, ID_MAINWIN_IGNOREDUSERLIST, wxDefaultPosition, wxSize(200,200), 0, 0, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT|wxSTATIC_BORDER);
+	ignoredUserList=new wxListBox(this, ID_MAINWIN_IGNOREDUSERLIST, wxDefaultPosition, wxSize(200,200), 0, nullptr, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT|wxSTATIC_BORDER);
 	ignoredUserList->SetBackgroundColour(wxColour(31, 48, 56));
 	ignoredUserList->SetForegroundColour(wxColour(140, 158, 180));
 	ignoredUserList->Hide();
@@ -251,7 +251,6 @@ MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &si
 
 	SetSizer(mainSizer);
 	SetAutoLayout(true);
-	chatInput->SetFocus();
 }
 
 MainFrame::~MainFrame() {
@@ -276,7 +275,6 @@ void MainFrame::OnSelectChannel(wxCommandEvent& WXUNUSED(event)) {
 	write(wxT("/join \"")+channelSwitcher->GetStringSelection()+wxT("\""));
 	whisperCheckbox->SetValue(false);
 	userList->DeselectAll();
-	chatInput->SetFocus();
 }
 
 void MainFrame::OnSelectUser(wxCommandEvent& WXUNUSED(event)) {
@@ -284,7 +282,6 @@ void MainFrame::OnSelectUser(wxCommandEvent& WXUNUSED(event)) {
 	if (!userList->GetSelections(selections)) {
 		whisperCheckbox->SetValue(false);
 	}
-	chatInput->SetFocus();
 }
 
 void MainFrame::OnWhisperClick(wxCommandEvent& WXUNUSED(event)) {
@@ -292,7 +289,6 @@ void MainFrame::OnWhisperClick(wxCommandEvent& WXUNUSED(event)) {
 	if (!userList->GetSelections(selections)) {
 		whisperCheckbox->SetValue(false);
 	}
-	chatInput->SetFocus();
 }
 
 //---------- Chat --------------
@@ -478,7 +474,6 @@ void MainFrame::Message(wxString Text, const wxString Input0, const wxString Inp
 		chatHistory+=wxT("</span>");
 	}
 	chatHistory+=wxT("\n");
-	chatInput->SetFocus();
 }
 
 //------ Channel -------

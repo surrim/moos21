@@ -12,18 +12,18 @@ END_EVENT_TABLE()
 
 //0=ok, 1=yes/no
 InfoDialog::InfoDialog(wxWindow* parent, wxFileConfig *langIni, const wxFont& font, const wxString& title, const wxString& text, int style, int defaultButton):
-		wxDialog(parent, -1, title),
-		mainSizer(0),
-		buttonSizer(0),
-		ltext(0),
-		button1(0),
-		button2(0),
+		wxDialog(parent, wxID_ANY, title),
+		mainSizer(nullptr),
+		buttonSizer(nullptr),
+		ltext(nullptr),
+		button1(nullptr),
+		button2(nullptr),
 		style(style) {
 	SetFont(font);
 	mainSizer=new wxBoxSizer(wxVERTICAL);
 	mainSizer->AddSpacer(6);
 	if (text!=wxEmptyString) {
-		ltext=new wxStaticText(this, -1, text);
+		ltext=new wxStaticText(this, wxID_ANY, text);
 		mainSizer->Add(ltext, 1, wxEXPAND|wxLEFT|wxRIGHT, 12);
 		mainSizer->AddSpacer(3);
 	}

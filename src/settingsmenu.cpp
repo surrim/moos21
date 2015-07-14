@@ -65,7 +65,6 @@ void MainFrame::OnChangeFont(wxCommandEvent & WXUNUSED(event)) {
 
 	font.SetInitialFont(font.GetChosenFont());
 	mainSizer->Layout();
-	chatInput->SetFocus();
 }
 
 void MainFrame::OnSelectLanguage(wxCommandEvent & WXUNUSED(event)) {

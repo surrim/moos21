@@ -19,29 +19,29 @@ END_EVENT_TABLE()
 //for user choice, password, slap and ignore list
 //0=input, 1=passwdinput, 2=singlechoice+input, 3=singlechoice, 4=multichoice
 InputDialog::InputDialog(wxWindow* parent, wxFileConfig *langIni, const wxFont& font, const wxString& title, const wxString& text, int style, const wxString& defaultButton, const wxArrayString& choiceList):
-		wxDialog(parent, -1, title),
-		mainSizer(0),
-		buttonSizer(0),
-		ltext(0),
-		choice(0),
-		input(0),
-		okButton(0),
-		cancelButton(0),
+		wxDialog(parent, wxID_ANY, title),
+		mainSizer(nullptr),
+		buttonSizer(nullptr),
+		ltext(nullptr),
+		choice(nullptr),
+		input(nullptr),
+		okButton(nullptr),
+		cancelButton(nullptr),
 		saved(),
 		style(style) {
 	SetFont(font);
 	mainSizer=new wxBoxSizer(wxVERTICAL);
 	mainSizer->AddSpacer(6);
 	if (text!=wxEmptyString) {
-		ltext=new wxStaticText(this, -1, text);
+		ltext=new wxStaticText(this, wxID_ANY, text);
 		mainSizer->Add(ltext, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
 		mainSizer->AddSpacer(3);
 	}
 	if (style>=2) {
 		if (style!=4)
-			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, wxDefaultCoord), choiceList);
+			choice=new wxListBox(this, wxID_ANY, wxDefaultPosition, wxSize(120, wxDefaultCoord), choiceList);
 		else
-			choice=new wxListBox(this, -1, wxDefaultPosition, wxSize(120, wxDefaultCoord), choiceList, wxLB_EXTENDED);
+			choice=new wxListBox(this, wxID_ANY, wxDefaultPosition, wxSize(120, wxDefaultCoord), choiceList, wxLB_EXTENDED);
 		if (choice->FindString(defaultButton)!=wxNOT_FOUND) {
 			choice->SetSelection(choice->FindString(defaultButton));
 		}
@@ -52,9 +52,9 @@ InputDialog::InputDialog(wxWindow* parent, wxFileConfig *langIni, const wxFont& 
 		//MainSizer->AddSpacer(-12);
 		//if (Style==2) MainSizer->AddSpacer(-5);
 		if (style!=1)
-			input=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(120, -1));
+			input=new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(120, -1));
 		else
-			input=new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxSize(120, -1), wxTE_PASSWORD);
+			input=new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(120, -1), wxTE_PASSWORD);
 		input->SetValue(defaultButton);
 		mainSizer->Add(input, 0, wxEXPAND|wxLEFT|wxRIGHT, 12);
 		mainSizer->AddSpacer(3);

@@ -20,7 +20,6 @@ void MainFrame::OnSaveChat(wxCommandEvent & WXUNUSED(event)) {
 			chatView->SaveFile(tmp->GetPath());
 		}
 	}
-	chatInput->SetFocus();
 }
 
 void MainFrame::OnFreezeChat(wxCommandEvent & WXUNUSED(event)) {
@@ -36,7 +35,6 @@ void MainFrame::OnFreezeChat(wxCommandEvent & WXUNUSED(event)) {
 void MainFrame::OnDeleteChat(wxCommandEvent & WXUNUSED(event)) {
 	chatView->Clear();
 	chatHistory=wxT("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"><html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-16LE\"><title>moos2.1</title><style type=\"text/css\">body{background-color:#1F3038; color:#8C9FBB}pre{font-family:\"ms sans serif\", sans-serif;}</style></head><body><pre>");
-	chatInput->SetFocus();
 }
 
 void MainFrame::OnColorSelect(wxCommandEvent & WXUNUSED(event)) {
@@ -50,7 +48,6 @@ void MainFrame::OnColorSelect(wxCommandEvent & WXUNUSED(event)) {
 	wxColourDialog tmp2(this, &tmp);
 	if (tmp2.ShowModal()!=wxID_OK || Color2Long(tmp2.GetColourData().GetColour())==langIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)) return;
 	moosIni->Write(wxT("accounts/")+Base64Encode(loginName)+wxT("/chatcolor"), Color2Long(tmp2.GetColourData().GetColour()));
-	chatInput->SetFocus();
 }
 
 void MainFrame::OnManualColorCode(wxCommandEvent & WXUNUSED(event)) {
@@ -75,5 +72,4 @@ void MainFrame::OnManualColorCode(wxCommandEvent & WXUNUSED(event)) {
 	long tmp2=MoonCode2Long(tmp->GetValue());
 	if (tmp2==langIni->Read(wxT("translations/channel/defaultcolor"), 0xFFBB9F8C)) return;
 	moosIni->Write(wxT("accounts/")+Base64Encode(loginName)+wxT("/chatcolor"), tmp2);
-	chatInput->SetFocus();
 }

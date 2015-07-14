@@ -23,27 +23,25 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-O2" />
-					<Add option="-march=prescott" />
 					<Add option="-fomit-frame-pointer" />
 					<Add option="-fexpensive-optimizations" />
+					<Add option="-O2" />
 					<Add option="-fno-exceptions" />
 					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-static-libgcc" />
-					<Add option="-static-libstdc++" />
 				</Linker>
-				<ExtraCommands>
-					<Add after="cmd.exe /c start /min /belownormal upx --ultra-brute $(TARGET_OUTPUT_FILE) -f -o $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME)_upx.exe" />
-					<Mode after="always" />
-				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Weffc++" />
+			<Add option="-pedantic" />
+			<Add option="-Wextra" />
+			<Add option="-Wall" />
 			<Add option="`wx-config-3.0 --cppflags`" />
 			<Add option="`pkg-config zlib --cflags`" />
+			<Add option="-isystem/usr/include/wx-3.0" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config-3.0 --libs`" />
