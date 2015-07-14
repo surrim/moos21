@@ -5,7 +5,7 @@
 #include <wx/fileconf.h>
 #include <wx/socket.h>
 
-void MainFrame::OnLoginAs(wxCommandEvent & WXUNUSED(event)) {
+void MainFrame::OnLoginAs(wxCommandEvent& WXUNUSED(event)) {
 	wxArrayString tmp;
 	long i;
 	wxString tmp3;
@@ -43,7 +43,7 @@ void MainFrame::OnLoginAs(wxCommandEvent & WXUNUSED(event)) {
 	}
 }
 
-void MainFrame::OnLogout(wxCommandEvent & WXUNUSED(event)) {
+void MainFrame::OnLogout(wxCommandEvent& WXUNUSED(event)) {
 	RemoveAllChannelsAndUsers();
 	if (socket->IsConnected()) {
 		Message(langIni->Read(wxT("translations/channel/events/userleftearthnet"),
@@ -53,6 +53,6 @@ void MainFrame::OnLogout(wxCommandEvent & WXUNUSED(event)) {
 	SetStatusText(langIni->Read(wxT("translations/statusbar/notconnected"), wxT("Not connected")));
 }
 
-void MainFrame::OnExit(wxCommandEvent & WXUNUSED(event)) {
+void MainFrame::OnExit(wxCommandEvent& WXUNUSED(event)) {
 	Close(true);
 }

@@ -16,9 +16,9 @@ class WhoisDialog: public wxDialog {
 	public:
 		WhoisDialog(wxWindow* parent, wxFileConfig *langIni, wxArrayString WhoisData, bool IsYourself, wxSocketClient* socket, wxFont font);
 
-		void OnChoice(wxCommandEvent &event);
-		void OnApply(wxCommandEvent &event);
-		void OnCancel(wxCommandEvent &event);
+		void OnChoice(wxCommandEvent& event);
+		void OnApply(wxCommandEvent& event);
+		void OnCancel(wxCommandEvent& event);
 	private:
 		WhoisDialog(const WhoisDialog& cc);
 		WhoisDialog& operator=(const WhoisDialog& cc);

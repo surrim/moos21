@@ -62,7 +62,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_MENU(ID_MAINWIN_ABOUT, MainFrame::OnAbout)
 END_EVENT_TABLE()
 
-MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &size):
+MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& size):
 		wxFrame(nullptr, wxID_ANY, title, pos, size),
 		mainSizer(nullptr),
 		listSizer(nullptr),

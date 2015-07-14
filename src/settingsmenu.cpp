@@ -39,7 +39,7 @@ void MainFrame::OnDisableSlaps(wxCommandEvent& WXUNUSED(event)) {
 	if (settingsMenu->IsChecked(ID_MAINWIN_DISABLE_SLAPS)) moosIni->Write(wxT("disableslaps"), true);
 }
 
-void MainFrame::OnChangeFont(wxCommandEvent & WXUNUSED(event)) {
+void MainFrame::OnChangeFont(wxCommandEvent& WXUNUSED(event)) {
 	wxFontDialog tmp(this, font);
 	if (tmp.ShowModal()!=wxID_OK || !tmp.GetFontData().GetChosenFont().Ok()) return;
 	font=tmp.GetFontData();
@@ -67,7 +67,7 @@ void MainFrame::OnChangeFont(wxCommandEvent & WXUNUSED(event)) {
 	mainSizer->Layout();
 }
 
-void MainFrame::OnSelectLanguage(wxCommandEvent & WXUNUSED(event)) {
+void MainFrame::OnSelectLanguage(wxCommandEvent& WXUNUSED(event)) {
 	wxFileDialog tmp(this, langIni->Read(wxT("translations/menus/settings/selectlanguage"), wxT("Select Language...")), wxEmptyString, moosIni->Read(wxT("languagefile"), wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPath()+wxFileName::GetPathSeparator()+wxT("*.ini")), langIni->Read(wxT("translations/other/inifiles"), wxT("Ini Files"))+wxT(" (*.ini)|*.ini|")+langIni->Read(wxT("translations/other/allfiles"), wxT("All Files"))+wxT(" (*.*)|*.*"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 	if (tmp.ShowModal()!=wxID_OK) return;
 	moosIni->Write(wxT("languagefile"), tmp.GetPath());

@@ -80,7 +80,7 @@ void MainFrame::OnIgnoreUser(wxCommandEvent& WXUNUSED(event)) {
 	}
 }
 
-void MainFrame::OnIgnoreList(wxCommandEvent & WXUNUSED(event)) {
+void MainFrame::OnIgnoreList(wxCommandEvent& WXUNUSED(event)) {
 	long i;
 	wxArrayString tmp;
 	wxString tmp2;

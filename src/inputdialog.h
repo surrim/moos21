@@ -15,9 +15,9 @@ class InputDialog: public wxDialog {
 	public:
 		InputDialog(wxWindow* parent, wxFileConfig *langIni, const wxFont& font, const wxString& title, const wxString& text=wxEmptyString, int style=0, const wxString& defaultButton=wxEmptyString, const wxArrayString& choiceList=wxArrayString());
 		void OnText(wxCommandEvent& Event);
-		void OnChoice(wxCommandEvent &event);
-		void OnOK(wxCommandEvent &event);
-		void OnCancel(wxCommandEvent &event);
+		void OnChoice(wxCommandEvent& event);
+		void OnOK(wxCommandEvent& event);
+		void OnCancel(wxCommandEvent& event);
 		wxString GetValue();
 		wxArrayString GetSelections();
 		void SetSelections(wxArrayInt& selections);
