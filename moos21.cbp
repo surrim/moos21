@@ -84,15 +84,13 @@
 				<Option type="0" />
 				<Option compiler="mingw32" />
 				<Compiler>
-					<Add option="-fomit-frame-pointer" />
-					<Add option="-fexpensive-optimizations" />
 					<Add option="-O2" />
 					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-static-libgcc" />
 					<Add option="-static-libstdc++" />
+					<Add option="-static-libgcc" />
 					<Add option="-Wl,--subsystem,windows" />
 					<Add option="-mwindows" />
 					<Add library="wx_mswu_richtext-2.8-i686-w64-mingw32" />
@@ -176,15 +174,13 @@
 				<Option type="0" />
 				<Option compiler="mingw64" />
 				<Compiler>
-					<Add option="-fomit-frame-pointer" />
-					<Add option="-fexpensive-optimizations" />
 					<Add option="-O2" />
 					<Add option="-DNDEBUG" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-static-libgcc" />
 					<Add option="-static-libstdc++" />
+					<Add option="-static-libgcc" />
 					<Add option="-Wl,--subsystem,windows" />
 					<Add option="-mwindows" />
 					<Add library="wx_mswu_richtext-2.8-x86_64-w64-mingw32" />
