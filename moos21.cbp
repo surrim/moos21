@@ -194,27 +194,27 @@
 		<Compiler>
 			<Add option="-std=gnu++11" />
 		</Compiler>
-		<Unit filename="base.cpp" />
-		<Unit filename="base.h" />
-		<Unit filename="connection.cpp" />
-		<Unit filename="enums.h" />
-		<Unit filename="helpmenu.cpp" />
-		<Unit filename="infodialog.cpp" />
-		<Unit filename="infodialog.h" />
-		<Unit filename="inputdialog.cpp" />
-		<Unit filename="inputdialog.h" />
-		<Unit filename="moos.rc">
+		<Unit filename="res/moos.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="moos21_private.h" />
-		<Unit filename="moosmenu.cpp" />
-		<Unit filename="settingsmenu.cpp" />
-		<Unit filename="tools.cpp" />
-		<Unit filename="tools.h" />
-		<Unit filename="usermenu.cpp" />
-		<Unit filename="viewmenu.cpp" />
-		<Unit filename="whoisdialog.cpp" />
-		<Unit filename="whoisdialog.h" />
+		<Unit filename="src/base.cpp" />
+		<Unit filename="src/base.h" />
+		<Unit filename="src/connection.cpp" />
+		<Unit filename="src/enums.h" />
+		<Unit filename="src/helpmenu.cpp" />
+		<Unit filename="src/infodialog.cpp" />
+		<Unit filename="src/infodialog.h" />
+		<Unit filename="src/inputdialog.cpp" />
+		<Unit filename="src/inputdialog.h" />
+		<Unit filename="src/moos21_private.h" />
+		<Unit filename="src/moosmenu.cpp" />
+		<Unit filename="src/settingsmenu.cpp" />
+		<Unit filename="src/tools.cpp" />
+		<Unit filename="src/tools.h" />
+		<Unit filename="src/usermenu.cpp" />
+		<Unit filename="src/viewmenu.cpp" />
+		<Unit filename="src/whoisdialog.cpp" />
+		<Unit filename="src/whoisdialog.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
