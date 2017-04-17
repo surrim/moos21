@@ -79,6 +79,21 @@ void MainFrame::OnConnect() {
 	socket->Write(loginPacket.data(), loginPacket.size());
 }
 
+static uint32_t readU32(const uint8_t *data) {
+    return
+        ((uint32_t)data[3] << 24)
+        |
+        ((uint32_t)data[2] << 16)
+        |
+        ((uint32_t)data[1] << 8)
+        |
+        ((uint32_t)data[0] << 0);
+}
+
+static std::string readString(const uint8_t *data, size_t size) {
+    return std::string(data, data + size);
+}
+
 void MainFrame::OnIncomingData() {
 	uint8_t inputbuffer[1024];
 	uint32_t inputbufferlen = 1024;
@@ -88,11 +103,11 @@ void MainFrame::OnIncomingData() {
 	while (inputbufferlen == 1024) {
 		socket->Read(inputbuffer, 1024);
 		inputbufferlen = socket->LastCount();
-		uint8_t *tmp = new uint8_t[bufferlen+inputbufferlen];
-		for (uint32_t i = 0; i != bufferlen; i++) {
+		uint8_t *tmp = new uint8_t[bufferlen + inputbufferlen];
+		for (auto i = 0u; i < bufferlen; i++) {
 			tmp[i] = buffer[i];
 		}
-		for (uint32_t i = 0; i != inputbufferlen; i++) {
+		for (auto i = 0u; i < inputbufferlen; i++) {
 			tmp[bufferlen + i] = inputbuffer[i];
 		}
 		delete[] buffer;
@@ -101,13 +116,13 @@ void MainFrame::OnIncomingData() {
 	}
 
 	a:
-	if (buffer[0]=='/' || buffer[0]=='$') {
-		std::string command="";
-		for (uint32_t i = 0; i != bufferlen; i++) {
+	if (buffer[0] == '/' || buffer[0] == '$') {
+		std::string command = "";
+		for (auto i = 0u; i < bufferlen; i++) {
 			if (!buffer[i]) {
 				parseProcessCommand(wxConvLibc.cMB2WC(command.c_str()));
 				uint8_t *tmp = new uint8_t[bufferlen - (i + 1)];
-				for (uint32_t j = i + 1; j != bufferlen; j++) {
+				for (auto j = i + 1; j != bufferlen; j++) {
 					tmp[j - (i + 1)] = buffer[j];
 				}
 				bufferlen -= i + 1;
@@ -121,45 +136,36 @@ void MainFrame::OnIncomingData() {
 		delete[] buffer;
 		return;
 	} else { //compressed data
-		uint32_t packetlen = *((uint32_t*)buffer);
-		char cbuffer[10240];
+		uint32_t packetlen = readU32(buffer);
+		uint8_t cbuffer[10240];
 		uLongf cbufferlen = 10240;
-		if (uncompress((Bytef*)cbuffer, &cbufferlen, (const Bytef*)(buffer+4), packetlen-4)==Z_OK) {
-			uint32_t packettype = (cbuffer[0] << 24) | (cbuffer[1] << 16) | (cbuffer[2] << 8) | cbuffer[3];
-			uint32_t contentlen = (cbuffer[4] << 24) | (cbuffer[5] << 16) | (cbuffer[6] << 8) | cbuffer[7];
-			std::string content;
+		if (uncompress((Bytef*)cbuffer, &cbufferlen, (const Bytef*)(buffer + 4), packetlen - 4) == Z_OK) {
+			auto packettype = readU32(cbuffer + 0);
+			auto contentlen = readU32(cbuffer + 4);
 			if (contentlen > packetlen) {
-				contentlen = packetlen-8;
+				contentlen = packetlen - 8;
 			}
-			for (uint32_t i = 0; i != contentlen; i++) {
-				content += cbuffer[i + 8];
-			}
-			if (packettype==0) { //Success
-				uint32_t stringlen = (cbuffer[8] << 24) | (cbuffer[9] << 16) | (cbuffer[10] << 8) | cbuffer[11];
+			auto content = readString(cbuffer + 8, contentlen);
+			if (packettype == 0) { //Success
+				uint32_t stringlen = readU32(cbuffer + 8);
 				if (stringlen > contentlen) {
 					//Aha das ist also dieser komische Ident
 				} else { //Welcome msg
-					std::string identifier;
-					std::string welcomemsg;
+					auto identifier = readString(cbuffer + 12, stringlen);
 
-					for (uint32_t i = 0; i != stringlen; i++) {
-						identifier += cbuffer[i + 12];
-					}
-					stringlen = (cbuffer[12+stringlen] << 24) | (cbuffer[13+stringlen] << 16) | (cbuffer[14+stringlen] << 8) | cbuffer[15+stringlen];;
-					for (uint32_t i = 0; i != stringlen; i++) {
-						welcomemsg += cbuffer[i + 16 + identifier.size()];
-					}
+					stringlen = readU32(cbuffer + 12 + identifier.size());
+					auto welcomemsg = readString(cbuffer + 12 + identifier.size() + 4, stringlen);
 					wxIPV4address tmp;
 					socket->GetPeer(tmp);
 					SetStatusText(Format(langIni->Read(wxT("translations/statusbar/connected"), wxT("Connected with <%0> (<%1>)")), tmp.Hostname(), tmp.IPAddress()));
 					//detect Game Versions
-					uint32_t vdx = 16 + identifier.size()+welcomemsg.size() + 44;
+					uint32_t vdx = 12 + identifier.size() + 4 + welcomemsg.size() + 44;
 					uint32_t versionlen = 0;
 					gameVersions.clear();
 					while (~cbuffer[vdx]) {
 						int32_t id = cbuffer[vdx];
-						std::string name=std::string(&cbuffer[vdx+5], versionlen);
-						versionlen = *((uint32_t*)(cbuffer + vdx + 1));
+						auto name = readString(cbuffer + vdx + 5, versionlen);
+						versionlen = readU32(cbuffer + vdx + 1);
 						gameVersions[id] = wxString(name.c_str(), wxConvISO8859_1);
 						vdx += 5 + versionlen;
 					}

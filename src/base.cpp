@@ -242,7 +242,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 	inputSizer->AddSpacer(3);
 	inputSizer->Add(whisperCheckbox, 0, wxEXPAND|wxALL, 0);
 
-	if (moosIni->Exists(wxT("autologin"))) {
+	if (0 && moosIni->Exists(wxT("autologin"))) {
 		loginAs(Base64Decode(moosIni->Read(wxT("autologin"))),
 				Base64Decode(moosIni->Read(wxT("accounts/")+moosIni->Read(wxT("autologin"))+wxT("/password")), true),
 				moosIni->Read(wxT("accounts/")+moosIni->Read(wxT("autologin"))+wxT("/server"), wxT("netserver.earth2150.com")),
