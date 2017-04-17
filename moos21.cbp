@@ -77,7 +77,8 @@
 					<Add option="`/usr/i686-w64-mingw32/sys-root/mingw/lib/wx/config/i686-w64-mingw32-msw-unicode-release-static-2.8 --libs`" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="upx $(TARGET_OUTPUT_FILE) -f -o $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME)_upx.exe" />
+					<Add after="rm -f $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z" />
+					<Add after="7za a -r -t7z -mx9 $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z $(PROJECT_DIR)README.md $(PROJECT_DIR)language/*.ini $(PROJECT_DIR)$(TARGET_OUTPUT_FILE)" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -121,7 +122,8 @@
 					<Add option="`/usr/x86_64-w64-mingw32/sys-root/mingw/lib/wx/config/x86_64-w64-mingw32-msw-unicode-release-static-2.8 --libs`" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="upx $(TARGET_OUTPUT_FILE) -f -o $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME)_upx.exe" />
+					<Add after="rm -f $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z" />
+					<Add after="7za a -r -t7z -mx9 $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z $(PROJECT_DIR)README.md $(PROJECT_DIR)language/*.ini $(PROJECT_DIR)$(TARGET_OUTPUT_FILE)" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
