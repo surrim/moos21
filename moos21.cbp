@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/debug/moos21" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/debug/moos21" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj/debug" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -22,7 +22,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/release/moos21" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/release/moos21" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj/release" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -38,7 +38,7 @@
 				</Linker>
 			</Target>
 			<Target title="Debug (MinGW32)">
-				<Option output="bin/debug-mingw32/moos21" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/debug-mingw32/moos21.exe" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj/debug-mingw32" />
 				<Option type="0" />
 				<Option compiler="mingw32" />
@@ -57,7 +57,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release (MinGW32)">
-				<Option output="bin/release-mingw32/moos21" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/release-mingw32/moos21.exe" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj/release-mingw32" />
 				<Option type="0" />
 				<Option compiler="mingw32" />
@@ -82,7 +82,7 @@
 				</ExtraCommands>
 			</Target>
 			<Target title="Debug (MinGW64)">
-				<Option output="bin/debug-mingw64/moos21" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/debug-mingw64/moos21.exe" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj/debug-mingw64" />
 				<Option type="0" />
 				<Option compiler="mingw64" />
@@ -101,7 +101,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release (MinGW64)">
-				<Option output="bin/release-mingw64/moos21" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/release-mingw64/moos21.exe" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj/release-mingw64" />
 				<Option type="0" />
 				<Option compiler="mingw64" />
