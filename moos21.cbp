@@ -140,7 +140,6 @@
 		<Unit filename="src/infodialog.h" />
 		<Unit filename="src/inputdialog.cpp" />
 		<Unit filename="src/inputdialog.h" />
-		<Unit filename="src/moos21_private.h" />
 		<Unit filename="src/moosmenu.cpp" />
 		<Unit filename="src/settingsmenu.cpp" />
 		<Unit filename="src/tools.cpp" />
