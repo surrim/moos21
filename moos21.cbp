@@ -186,9 +186,6 @@
 				</ExtraCommands>
 			</Target>
 		</Build>
-		<Compiler>
-			<Add option="-std=gnu++11" />
-		</Compiler>
 		<Unit filename="res/moos.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
