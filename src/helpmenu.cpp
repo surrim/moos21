@@ -22,7 +22,7 @@
 #include <wx/fileconf.h>
 
 void MainFrame::OnOnlineReadme(wxCommandEvent& WXUNUSED(event)) {
-	wxLaunchDefaultBrowser(wxT("http://surrim.de/?moos"));
+	wxLaunchDefaultBrowser(wxT("https://old.surrim.org/?moos"));
 }
 
 void MainFrame::OnMailBugs(wxCommandEvent& WXUNUSED(event)) {
