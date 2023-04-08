@@ -152,7 +152,11 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 	#ifdef WIN32
 	SetIcon(wxICON(A));
 	#else
-	SetIcon(wxIcon(wxT("icons/moos.png"), wxBITMAP_TYPE_PNG));
+	if (wxFile::Exists(wxT("moos.png"))) {
+		SetIcon(wxIcon(wxT("moos.png"), wxBITMAP_TYPE_PNG));
+	} else if (wxFile::Exists(wxT("icons/moos.png"))) {
+		SetIcon(wxIcon(wxT("icons/moos.png"), wxBITMAP_TYPE_PNG));
+	}
 	#endif
 	CreateStatusBar();
 	SetStatusText(langIni->Read(wxT("translations/statusbar/notconnected"), wxT("Not connected")));

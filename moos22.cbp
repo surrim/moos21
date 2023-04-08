@@ -38,7 +38,7 @@
 				</Linker>
 				<ExtraCommands>
 					<Add after="rm -f $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z" />
-					<Add after="7za a -r -t7z -mx9 $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z $(PROJECT_DIR)README.md $(PROJECT_DIR)language/*.ini $(PROJECT_DIR)$(TARGET_OUTPUT_FILE)" />
+					<Add after="7za a -r -t7z -mx9 $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME)-linux.7z $(PROJECT_DIR)README.md $(PROJECT_DIR)LICENSE $(PROJECT_DIR)/icons/moos.png $(PROJECT_DIR)language/*.ini $(PROJECT_DIR)$(TARGET_OUTPUT_FILE)" />
 				</ExtraCommands>
 			</Target>
 			<Target title="Debug (MinGW32)">
@@ -82,7 +82,7 @@
 				</Linker>
 				<ExtraCommands>
 					<Add after="rm -f $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z" />
-					<Add after="7za a -r -t7z -mx9 $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z $(PROJECT_DIR)README.md $(PROJECT_DIR)language/*.ini $(PROJECT_DIR)$(TARGET_OUTPUT_FILE)" />
+					<Add after="7za a -r -t7z -mx9 $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME)-win32.7z $(PROJECT_DIR)README.md $(PROJECT_DIR)LICENSE $(PROJECT_DIR)language/*.ini $(PROJECT_DIR)$(TARGET_OUTPUT_FILE)" />
 				</ExtraCommands>
 			</Target>
 			<Target title="Debug (MinGW64)">
@@ -126,7 +126,7 @@
 				</Linker>
 				<ExtraCommands>
 					<Add after="rm -f $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z" />
-					<Add after="7za a -r -t7z -mx9 $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).7z $(PROJECT_DIR)README.md $(PROJECT_DIR)language/*.ini $(PROJECT_DIR)$(TARGET_OUTPUT_FILE)" />
+					<Add after="7za a -r -t7z -mx9 $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME)-win64.7z $(PROJECT_DIR)README.md $(PROJECT_DIR)LICENSE $(PROJECT_DIR)language/*.ini $(PROJECT_DIR)$(TARGET_OUTPUT_FILE)" />
 				</ExtraCommands>
 			</Target>
 		</Build>
