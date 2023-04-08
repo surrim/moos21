@@ -147,6 +147,8 @@
 		<Unit filename="src/tools.cpp" />
 		<Unit filename="src/tools.h" />
 		<Unit filename="src/usermenu.cpp" />
+		<Unit filename="src/utils.cpp" />
+		<Unit filename="src/utils.h" />
 		<Unit filename="src/viewmenu.cpp" />
 		<Unit filename="src/whoisdialog.cpp" />
 		<Unit filename="src/whoisdialog.h" />

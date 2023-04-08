@@ -18,6 +18,7 @@
 
 #include "base.h"
 
+#include "utils.h"
 #include "tools.h"
 #include "inputdialog.h"
 #include <wx/fileconf.h>
@@ -55,9 +56,12 @@ void MainFrame::OnLoginAs(wxCommandEvent& WXUNUSED(event)) {
 			Message(langIni->Read(wxT("translations/channel/events/userleftearthnet"),
 								  wxT("<0xA050FFFF>[<%T>] User <0xFF80FFFF><%0><0xA050FFFF> left channel")), loginName);
 		}
-		loginAs(User, Password, moosIni->Read(wxT("accounts/")+Base64Encode(User)+wxT("/server"), wxT("netserver.earth2150.com")),
-				moosIni->Read(wxT("server/")+moosIni->Read(wxT("accounts/")+Base64Encode(User)+wxT("/server"),
-							  wxT("netserver.earth2150.com"))+wxT("/port"), wxT("17171")));
+		loginAs(
+				User,
+				Password,
+				getUserServer(*moosIni, User),
+				getUserPort(*moosIni, User)
+		);
 	}
 }
 

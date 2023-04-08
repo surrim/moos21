@@ -18,6 +18,7 @@
 
 #include "base.h"
 
+#include "utils.h"
 #include "enums.h"
 #include "inputdialog.h"
 #include "tools.h"
@@ -261,10 +262,13 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 	inputSizer->Add(whisperCheckbox, 0, wxEXPAND|wxALL, 0);
 
 	if (0 && moosIni->Exists(wxT("autologin"))) {
-		loginAs(Base64Decode(moosIni->Read(wxT("autologin"))),
-				Base64Decode(moosIni->Read(wxT("accounts/")+moosIni->Read(wxT("autologin"))+wxT("/password")), true),
-				moosIni->Read(wxT("accounts/")+moosIni->Read(wxT("autologin"))+wxT("/server"), wxT("netserver.earth2150.com")),
-				moosIni->Read(wxT("accounts/")+moosIni->Read(wxT("autologin"))+wxT("/port"), wxT("17171")));
+		wxString user = Base64Decode(moosIni->Read(wxT("autologin")));
+		loginAs(
+				user,
+				getUserPassword(*moosIni, user),
+				getUserServer(*moosIni, user),
+				getUserPort(*moosIni, user)
+		);
 	}
 
 	SetSizer(mainSizer);

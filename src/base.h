@@ -75,7 +75,7 @@ class MainFrame: public wxFrame {
 		void parseProcessCommand(const wxString& strData);
 		wxString getVersion(const wxString& id);
 		void write(const wxString& data);
-		void loginAs(const wxString& loginName, const wxString& loginPassword, const wxString& server=wxEmptyString, const wxString& port=wxEmptyString);
+		void loginAs(const wxString& loginName, const wxString& loginPassword, const wxString& server, const wxString& port);
 
 		//moosmenu.cpp - Moos Menu
 		void OnLoginAs(wxCommandEvent& event);

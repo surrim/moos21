@@ -21,6 +21,7 @@
 #include "enums.h"
 #include "infodialog.h"
 #include "tools.h"
+#include "utils.h"
 #include "whoisdialog.h"
 #include <cinttypes>
 #include <wx/menu.h>
@@ -83,8 +84,12 @@ void MainFrame::OnConnectionLost() {
 		socket->Close();
 	}
 	if (InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), langIni->Read(wxT("translations/dialogtext/reconnect"), wxT("Connection lost. Try to reconnect?")), 1).ShowModal()==wxID_YES) {
-		loginAs(loginName, loginPassword, moosIni->Read(wxT("accounts/")+Base64Encode(loginName)+wxT("/server"), wxT("netserver.earth2150.com")),
-				moosIni->Read(wxT("accounts/")+Base64Encode(loginName)+wxT("/port"), wxT("17171")));
+		loginAs(
+				loginName,
+				loginPassword,
+				getUserServer(*moosIni, loginName),
+				getUserPort(*moosIni, loginName)
+		);
 	}
 }
 
