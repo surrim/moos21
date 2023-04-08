@@ -160,54 +160,71 @@ void MainFrame::OnIncomingData() {
 		return;
 	} else { //compressed data
 		uint32_t packetlen = readU32(buffer);
-		uint8_t cbuffer[10240];
 		uLongf cbufferlen = 10240;
+		uint8_t cbuffer[10240];
 		if (uncompress((Bytef*)cbuffer, &cbufferlen, (const Bytef*)(buffer + 4), packetlen - 4) == Z_OK) {
-			auto packettype = readU32(cbuffer + 0);
-			auto contentlen = readU32(cbuffer + 4);
-			if (contentlen > packetlen) {
-				contentlen = packetlen - 8;
-			}
-			auto content = readString(cbuffer + 8, contentlen);
+			uint8_t *cbufferpos = cbuffer;
+			auto packettype = readU32(cbufferpos); cbufferpos += 4;
 			if (packettype == 0) { //Success
-				uint32_t stringlen = readU32(cbuffer + 8);
-				if (stringlen > contentlen) {
-					//Aha das ist also dieser komische Ident
-				} else { //Welcome msg
-					auto identifier = readString(cbuffer + 12, stringlen);
-
-					stringlen = readU32(cbuffer + 12 + identifier.size());
-					auto welcomemsg = readString(cbuffer + 12 + identifier.size() + 4, stringlen);
-					wxIPV4address tmp;
-					socket->GetPeer(tmp);
-					SetStatusText(Format(langIni->Read(wxT("translations/statusbar/connected"), wxT("Connected with <%0> (<%1>)")), tmp.Hostname(), tmp.IPAddress()));
-					//detect Game Versions
-					uint32_t vdx = 12 + identifier.size() + 4 + welcomemsg.size() + 44;
-					uint32_t versionlen = 0;
-					gameVersions.clear();
-					while (~cbuffer[vdx]) {
-						int32_t id = cbuffer[vdx];
-						auto name = readString(cbuffer + vdx + 5, versionlen);
-						versionlen = readU32(cbuffer + vdx + 1);
-						gameVersions[id] = wxString(name.c_str(), wxConvISO8859_1);
-						vdx += 5 + versionlen;
-					}
-
-					while (true) {
-						auto foundPosition = welcomemsg.find("<*>");
-						if (foundPosition != std::string::npos) {
-							welcomemsg = welcomemsg.substr(0, foundPosition)+"<0xFFFFFFFF>" + welcomemsg.substr(foundPosition + 3);
-						} else {
-							break;
-						}
-					}
-
-					Message(wxString(welcomemsg.data(), wxConvISO8859_1, welcomemsg.size()));
-					AddUser(loginName);
-					RefreshAutocomplete(loginName);
-					moosIni->Write(wxT("accounts/") + Base64Encode(loginName) + wxT("/password"), Base64Encode(loginPassword, true));
+				//cbufferpos += 4; // ignore the packet length
+				auto ourIp = readU32(cbufferpos); cbufferpos += 4;
+				if (ourIp > packetlen) {
+					ourIp = packetlen - 8;
+					/* I know this code is crap and makes no sense, but it works.
+					 * Usually you should use the client connection states
+					 * - not connected
+					 * - identifying
+					 * - loggin in
+					 * - logged in
+					 * ... and handle the incomming data depending on that state instead
+					 * of the first char ("/" or "$"), and "guessing the state".
+					 * This is implemented in moos3 but needs classes; Rewriting
+					 * many parts of moos2.1 would end up in another moos3...
+					 */
 				}
+				uint32_t serverIdentifierSize = readU32(cbufferpos); cbufferpos += 4;
+				if (serverIdentifierSize > ourIp) {
+					//Aha das ist also dieser komische Ident
+					goto b;
+				}
+				auto serverIdentifier = readString(cbufferpos, serverIdentifierSize); cbufferpos += serverIdentifierSize;
+				auto serverWelcomeMessageSize = readU32(cbufferpos); cbufferpos += 4;
+				auto serverWelcomeMessage = readString(cbufferpos, serverWelcomeMessageSize); cbufferpos += serverWelcomeMessageSize;
+				cbufferpos += 4 * 11; // skip stats and other data
+
+				//detect Game Versions
+				gameVersions.clear();
+				while (true) {
+					uint8_t id = *cbufferpos; cbufferpos++;
+					if (id == 0xFF) {
+						break;
+					}
+					auto userAgentNameSize = readU32(cbufferpos); cbufferpos += 4;
+					auto userAgentName = readString(cbufferpos, userAgentNameSize); cbufferpos += userAgentNameSize;
+					gameVersions[id] = wxString(userAgentName.c_str(), wxConvISO8859_1);
+				}
+
+				while (true) {
+					auto foundPosition = serverWelcomeMessage.find("<*>");
+					if (foundPosition != std::string::npos) {
+						serverWelcomeMessage = serverWelcomeMessage.substr(0, foundPosition)+"<0xFFFFFFFF>" + serverWelcomeMessage.substr(foundPosition + 3);
+					} else {
+						break;
+					}
+				}
+
+				wxIPV4address tmp;
+				socket->GetPeer(tmp);
+				SetStatusText(Format(langIni->Read(wxT("translations/statusbar/connected"), wxT("Connected with <%0> (<%1>)")), tmp.Hostname(), tmp.IPAddress()));
+
+				Message(wxString(serverWelcomeMessage.data(), wxConvISO8859_1, serverWelcomeMessage.size()));
+				AddUser(loginName);
+				RefreshAutocomplete(loginName);
+				moosIni->Write(wxT("accounts/") + Base64Encode(loginName) + wxT("/password"), Base64Encode(loginPassword, true));
 			} else if (packettype == 2) { //Error
+				cbufferpos += 4; // ignore the packet length
+				auto contentlen = readU32(cbufferpos); cbufferpos += 4;
+				auto content = readString(cbufferpos, contentlen); cbufferpos += contentlen;
 				if (content == "translateInvalidCharactersInName") {
 					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), langIni->Read(wxT("translations/dialogtext/illegalusername"),
 							   wxT("Error: Your user name contains invalid characters"))).ShowModal();
@@ -238,6 +255,7 @@ void MainFrame::OnIncomingData() {
 			}
 		}
 
+		b:
 		if (bufferlen <= packetlen) {
 			delete[] buffer;
 			bufferlen = 0;
