@@ -1,4 +1,4 @@
-/* Copyright 2011-2017 surrim
+/* Copyright 2011-2023 surrim
  *
  * This file is part of moos.
  *
@@ -113,7 +113,7 @@ void MainFrame::OnSelectLanguage(wxCommandEvent& WXUNUSED(event)) {
 	settingsMenu->SetLabel(ID_MAINWIN_SELECT_LANGUAGE, langIni->Read(wxT("translations/menus/settings/selectlanguage"), wxT("Select Language...")));
 	helpMenu->SetLabel(ID_MAINWIN_ONLINEREADME, langIni->Read(wxT("translations/menus/help/onlinereadme"), wxT("Online Readme")));
 	helpMenu->SetLabel(ID_MAINWIN_MAILBUGS, langIni->Read(wxT("translations/menus/help/mailbugs"), wxT("Mail Bugs")));
-	helpMenu->SetLabel(ID_MAINWIN_ABOUT, langIni->Read(wxT("translations/menus/help/about"), wxT("About Moos 2.1...")));
+	helpMenu->SetLabel(ID_MAINWIN_ABOUT, langIni->Read(wxT("translations/menus/help/about"), wxT("About Moos 2.2...")));
 	menuBar->SetMenuLabel(0, langIni->Read(wxT("translations/menus/moos"), wxT("Moos")));
 	menuBar->SetMenuLabel(1, langIni->Read(wxT("translations/menus/user"), wxT("User")));
 	menuBar->SetMenuLabel(2, langIni->Read(wxT("translations/menus/view"), wxT("View")));

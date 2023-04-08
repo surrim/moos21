@@ -1,4 +1,4 @@
-/* Copyright 2011-2017 surrim
+/* Copyright 2011-2023 surrim
  *
  * This file is part of moos.
  *
@@ -38,7 +38,7 @@ const wxString MoosApp::CONFIG_FILE(wxT("moos.ini"));
 
 bool MoosApp::OnInit() {
 	wxImage::AddHandler(new wxPNGHandler);
-	MainFrame *win=new MainFrame(wxT("moos2.1"), wxDefaultPosition, wxSize(720, 480));
+	MainFrame *win=new MainFrame(wxT("moos2.2"), wxDefaultPosition, wxSize(720, 480));
 	win->Show();
 	SetTopWindow(win);
 	return true;
@@ -173,7 +173,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 	font.SetChosenFont(tmp);
 	font.EnableEffects(false);
 	SetBackgroundColour(wxColour(212, 208, 200));
-	chatHistory=wxT("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"><html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-16LE\"><title>moos2.1</title><style type=\"text/css\">body{background-color:#1F3038; color:#8C9FBB}pre{font-family:\"ms sans serif\", sans-serif;}</style></head><body><pre>");
+	chatHistory=wxT("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"><html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-16LE\"><title>moos2.2</title><style type=\"text/css\">body{background-color:#1F3038; color:#8C9FBB}pre{font-family:\"ms sans serif\", sans-serif;}</style></head><body><pre>");
 
 	moosMenu=new wxMenu;
 	moosMenu->Append(ID_MAINWIN_LOGIN_AS, langIni->Read(wxT("translations/menus/moos/loginas"), wxT("Login as...")));
@@ -210,7 +210,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 	helpMenu->Append(ID_MAINWIN_ONLINEREADME, langIni->Read(wxT("translations/menus/help/onlinereadme"), wxT("Online Readme")));
 	helpMenu->Append(ID_MAINWIN_MAILBUGS, langIni->Read(wxT("translations/menus/help/mailbugs"), wxT("Mail Bugs")));
 	helpMenu->AppendSeparator();
-	helpMenu->Append(ID_MAINWIN_ABOUT, langIni->Read(wxT("translations/menus/help/about"), wxT("About Moos 2.1...")));
+	helpMenu->Append(ID_MAINWIN_ABOUT, langIni->Read(wxT("translations/menus/help/about"), wxT("About Moos 2.2...")));
 
 	menuBar=new wxMenuBar;
 	menuBar->Append(moosMenu, langIni->Read(wxT("translations/menus/moos"), wxT("Moos")));

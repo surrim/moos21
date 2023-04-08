@@ -1,6 +1,10 @@
-# moos 2.1
-
-moos 2.1 has been modified by surrim. Original work by mensi and CABAListic.
+# moos 2.2
+* rewritten login code
+* default "server" setting for moos.ini, server default ports
+* default server is now netserver2150.insideearth.info, port 17171
+* added CMake files, thanks to Vollkornwurst
+* build targets fixed
+* version updated to 2.2
 
 ## Changes for 2.1.0.2064
 * fixed problem with special chars, disabled multi byte strings
@@ -36,4 +40,7 @@ moos 2.1 has been modified by surrim. Original work by mensi and CABAListic.
 * EXE is compressed with UPX
 * New Readme Link
 * Some fixes in hungarian.ini made by Tas
+
+## moos 2.1
+* moos 2.1 has been modified by surrim. Original work by mensi and CABAListic.
 

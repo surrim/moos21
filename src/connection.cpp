@@ -1,4 +1,4 @@
-/* Copyright 2011-2017 surrim
+/* Copyright 2011-2023 surrim
  *
  * This file is part of moos.
  *
@@ -35,7 +35,7 @@ static std::string compressMessage(const std::string& message) {
 	uLongf compressedMessageSize = 1000;
 	std::string compressedMessage(compressedMessageSize, '\0');
 	if (compress((Bytef*)compressedMessage.data(), &compressedMessageSize, (const Bytef*)message.data(), message.size()) != Z_OK) {
-		wxMessageDialog(nullptr, wxT("compression error"), wxT("moos2.1"), wxOK | wxCENTRE | wxICON_ERROR).ShowModal();
+		wxMessageDialog(nullptr, wxT("compression error"), wxT("moos2.2"), wxOK | wxCENTRE | wxICON_ERROR).ShowModal();
 	}
 	return compressedMessage.substr(0, compressedMessageSize);
 }
@@ -83,7 +83,7 @@ void MainFrame::OnConnectionLost() {
 	if (socket->IsConnected()) {
 		socket->Close();
 	}
-	if (InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), langIni->Read(wxT("translations/dialogtext/reconnect"), wxT("Connection lost. Try to reconnect?")), 1).ShowModal()==wxID_YES) {
+	if (InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.2"), langIni->Read(wxT("translations/dialogtext/reconnect"), wxT("Connection lost. Try to reconnect?")), 1).ShowModal()==wxID_YES) {
 		loginAs(
 				loginName,
 				loginPassword,
@@ -179,7 +179,7 @@ void MainFrame::OnIncomingData() {
 					 * ... and handle the incomming data depending on that state instead
 					 * of the first char ("/" or "$"), and "guessing the state".
 					 * This is implemented in moos3 but needs classes; Rewriting
-					 * many parts of moos2.1 would end up in another moos3...
+					 * many parts of moos2.x would end up in another moos3...
 					 */
 				}
 				uint32_t serverIdentifierSize = readU32(cbufferpos); cbufferpos += 4;
@@ -226,25 +226,25 @@ void MainFrame::OnIncomingData() {
 				auto contentlen = readU32(cbufferpos); cbufferpos += 4;
 				auto content = readString(cbufferpos, contentlen); cbufferpos += contentlen;
 				if (content == "translateInvalidCharactersInName") {
-					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), langIni->Read(wxT("translations/dialogtext/illegalusername"),
+					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.2"), langIni->Read(wxT("translations/dialogtext/illegalusername"),
 							   wxT("Error: Your user name contains invalid characters"))).ShowModal();
 					moosIni->DeleteGroup(wxT("accounts/") + Base64Encode(loginName));
 					loginName = wxEmptyString;
 				} else if (content == "translateInvalidUserName") {
-					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"),
+					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.2"),
 							   langIni->Read(wxT("translations/dialogtext/userdoesntexist"), wxT("Error: Invalid user name"))).ShowModal();
 					moosIni->DeleteGroup(wxT("accounts/") + Base64Encode(loginName));
 					loginName = wxEmptyString;
 				} else if (content == "translateInvalidPassword") {
-					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"),
+					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.2"),
 							   langIni->Read(wxT("translations/dialogtext/wrongpassword"), wxT("Error: Invalid password"))).ShowModal();
 					moosIni->DeleteEntry(wxT("accounts/") + Base64Encode(loginName) + wxT("/password"), false);
 				} else if (content == "translateAlreadyLogIn") {
 					moosIni->Write(wxT("accounts/") + Base64Encode(loginName) + wxT("/password"), Base64Encode(loginPassword, true));
-					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"),
+					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.2"),
 							   langIni->Read(wxT("translations/dialogtext/allreadyloggedin"), wxT("Error: The user is already logged in"))).ShowModal();
 				} else {
-					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.1"), wxString(content.data(), wxConvISO8859_1, content.size())).ShowModal();
+					InfoDialog(this, langIni, font.GetChosenFont(), wxT("moos2.2"), wxString(content.data(), wxConvISO8859_1, content.size())).ShowModal();
 					moosIni->DeleteGroup(wxT("accounts/") + Base64Encode(loginName));
 					loginName = wxEmptyString;
 				}

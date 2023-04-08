@@ -1,4 +1,4 @@
-/* Copyright 2011-2017 surrim
+/* Copyright 2011-2023 surrim
  *
  * This file is part of moos.
  *

@@ -1,4 +1,4 @@
-/* Copyright 2011-2017 surrim
+/* Copyright 2011-2023 surrim
  *
  * This file is part of moos.
  *
@@ -52,7 +52,7 @@ void MainFrame::OnFreezeChat(wxCommandEvent& WXUNUSED(event)) {
 
 void MainFrame::OnDeleteChat(wxCommandEvent& WXUNUSED(event)) {
 	chatView->Clear();
-	chatHistory=wxT("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"><html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-16LE\"><title>moos2.1</title><style type=\"text/css\">body{background-color:#1F3038; color:#8C9FBB}pre{font-family:\"ms sans serif\", sans-serif;}</style></head><body><pre>");
+	chatHistory=wxT("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"><html><head><meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-16LE\"><title>moos2.2</title><style type=\"text/css\">body{background-color:#1F3038; color:#8C9FBB}pre{font-family:\"ms sans serif\", sans-serif;}</style></head><body><pre>");
 }
 
 void MainFrame::OnColorSelect(wxCommandEvent& WXUNUSED(event)) {
