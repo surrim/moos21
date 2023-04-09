@@ -265,7 +265,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 	inputSizer->AddSpacer(3);
 	inputSizer->Add(whisperCheckbox, 0, wxEXPAND|wxALL, 0);
 
-	if (0 && moosIni->Exists(wxT("autologin"))) {
+	if (moosIni->Exists(wxT("autologin"))) {
 		wxString user = Base64Decode(moosIni->Read(wxT("autologin")));
 		loginAs(
 				user,
