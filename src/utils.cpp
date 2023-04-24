@@ -3,7 +3,7 @@
 #include "tools.h"
 
 wxString getDefaultServer(const wxFileConfig& moosIni) {
-	return moosIni.Read(wxT("server"), wxT("netserver2150.insideearth.info"));
+	return moosIni.Read(wxT("server"), wxT("moos.insideearth.info"));
 }
 
 wxString getUserServer(const wxFileConfig& moosIni, const wxString& User) {
@@ -12,7 +12,7 @@ wxString getUserServer(const wxFileConfig& moosIni, const wxString& User) {
 }
 
 wxString getServerPort(const wxFileConfig& moosIni, const wxString& Server) {
-	return moosIni.Read(wxT("server/")+Server+wxT("/port"), wxT("17171"));
+	return moosIni.Read(wxT("server/")+Server+wxT("/port"), wxT("12100"));
 }
 
 wxString getUserPort(const wxFileConfig& moosIni, const wxString& User) {
