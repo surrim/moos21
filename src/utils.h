@@ -5,7 +5,7 @@
 #include <wx/fileconf.h>
 
 wxString getDefaultServer(const wxFileConfig& moosIni);
-wxString getUserServer(const wxFileConfig& moosIni, const wxString& User);
-wxString getServerPort(const wxFileConfig& moosIni, const wxString& Server);
-wxString getUserPort(const wxFileConfig& moosIni, const wxString& User);
-wxString getUserPassword(const wxFileConfig& moosIni, const wxString& User);
+wxString getUserServer(const wxFileConfig& moosIni, const wxString& user);
+wxString getServerPort(const wxFileConfig& moosIni, const wxString& server);
+wxString getUserPort(const wxFileConfig& moosIni, const wxString& user);
+wxString getUserPassword(const wxFileConfig& moosIni, const wxString& user);

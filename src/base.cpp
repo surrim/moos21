@@ -267,12 +267,10 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	if (moosIni->Exists(wxT("autologin"))) {
 		wxString user = Base64Decode(moosIni->Read(wxT("autologin")));
-		loginAs(
-				user,
-				getUserPassword(*moosIni, user),
-				getUserServer(*moosIni, user),
-				getUserPort(*moosIni, user)
-		);
+		auto password = getUserPassword(*moosIni, user);
+		auto server = getUserServer(*moosIni, user);
+		auto port = getUserPort(*moosIni, user);
+		loginAs(user, password, server, port);
 	}
 
 	SetSizer(mainSizer);

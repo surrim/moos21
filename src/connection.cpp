@@ -69,9 +69,9 @@ void MainFrame::OnSocketEvent(wxSocketEvent& event) {
 	case wxSOCKET_LOST:
 		return OnConnectionLost();
 	case wxSOCKET_OUTPUT:
-		break;
+	default:
+		return;
 	}
-	return;
 }
 
 void MainFrame::OnConnectionLost() {
