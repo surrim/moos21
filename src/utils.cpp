@@ -23,6 +23,6 @@ wxString getUserPort(const wxFileConfig& moosIni, const wxString& User) {
 
 wxString getUserPassword(const wxFileConfig& moosIni, const wxString& User) {
 	wxString usernameAsBase64 = Base64Encode(User);
-	wxString encodedPassword = moosIni.Read(wxT("accounts/")+User+wxT("/password"));
+	wxString encodedPassword = moosIni.Read(wxT("accounts/")+usernameAsBase64+wxT("/password"));
 	return Base64Decode(encodedPassword, true);
 }
