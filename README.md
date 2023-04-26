@@ -1,6 +1,10 @@
+# moos 2.2.1
+* fixed autologin
+* default server is now moos.insideearth.info, port 12100
+
 # moos 2.2
 * rewritten login code
-* default "server" setting for moos.ini, server default ports
+* default "server" setting for moos.ini, server custom port
 * default server is now netserver2150.insideearth.info, port 17171
 * added CMake files, thanks to Vollkornwurst
 * build targets fixed

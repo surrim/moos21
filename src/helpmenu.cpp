@@ -30,9 +30,9 @@ void MainFrame::OnMailBugs(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event)) {
-	InfoDialog(this, langIni, font.GetChosenFont(), langIni->Read(wxT("translations/menus/help/about"), wxT("About Moos 2.2...")),
+	InfoDialog(this, langIni, font.GetChosenFont(), langIni->Read(wxT("translations/menus/help/about"), wxT("About Moos...")),
 			   wxT(R"raw(
-MoonNet Omnipresent Observation System 2.2
+MoonNet Omnipresent Observation System 2.2.1
 moos is an Inside Earth Operations application (www.insideearth.de)
 written by mensi (mensi@insideearth.de), modified by surrim.
 
